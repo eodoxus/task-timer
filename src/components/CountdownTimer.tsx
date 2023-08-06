@@ -10,6 +10,7 @@ import {
   startChime,
   update as updateCountdown,
   useCountdownState,
+  useIsChiming,
 } from '../store/countdown';
 import {useTinkerBell} from '../hooks/use-tinker-bell';
 
@@ -43,9 +44,10 @@ const getSecondsRemainingInInterval = (intervalLength: number) => {
 
 export const CountdownTimer: React.FC = () => {
   const dispatch = useDispatch();
-  const {start, stop} = useTinkerBell();
-  const {intervalLength, isChiming, month, day, year, hour, minute, meridiem} =
+  const {intervalLength, month, day, year, hour, minute, meridiem} =
     useCountdownState();
+  const isChiming = useIsChiming();
+  const {start, stop} = useTinkerBell();
 
   useEffect(() => (isChiming ? start() : stop()), [start, stop, isChiming]);
 

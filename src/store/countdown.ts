@@ -87,13 +87,22 @@ export const {mute, unmute, startChime, stopChime, update} = slice.actions;
 const selectCountdownState = (state: RootState) => state.countdown;
 export const useCountdownState = () => useSelector(selectCountdownState);
 
-export const selectIntervalLength = (state: RootState) =>
-  state.countdown.intervalLength;
+const selectDate = (state: RootState) => state.countdown.date;
+export const useDate = () => useSelector(selectDate);
 
-export const selectDate = (state: RootState) => state.countdown.date;
+const selectHour = (state: RootState) => state.countdown.hour;
+export const useHour = () => useSelector(selectHour);
 
-export const selectHour = (state: RootState) => state.countdown.hour;
+const selectMinute = (state: RootState) => state.countdown.minute;
+export const useMinute = () => useSelector(selectMinute);
 
-export const selectMinute = (state: RootState) => state.countdown.minute;
+const selectQuarter = (state: RootState) => state.countdown.quarter;
+export const useQuarter = () => useSelector(selectQuarter);
+
+const selectIsChiming = (state: RootState) => state.countdown.isChiming;
+export const useIsChiming = () => useSelector(selectIsChiming);
+
+const selectIsMuted = (state: RootState) => state.countdown.isMuted;
+export const useIsMuted = () => useSelector(selectIsMuted);
 
 export const reducer = slice.reducer;

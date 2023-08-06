@@ -4,17 +4,17 @@ import {useDispatch} from 'react-redux';
 
 import {Button} from './Button';
 import {PlaybackError} from './PlaybackError';
-import {mute, unmute, useCountdownState} from '../store/countdown';
+import {mute, unmute, useIsMuted} from '../store/countdown';
 import {useTinkerBell} from '../hooks/use-tinker-bell';
 import {Colors} from 'react-native-ui-lib';
 
-export const PlayerControls: React.FC = () => {
+export const PlayerControls = () => {
   const {error} = useTinkerBell();
-  const {isMuted} = useCountdownState();
+  const isMuted = useIsMuted();
   const dispatch = useDispatch();
 
   return (
-    <View style={styles.container}>
+    <>
       <View style={styles.row}>
         <Button
           title={isMuted ? 'Unmute' : 'Mute'}
@@ -24,7 +24,7 @@ export const PlayerControls: React.FC = () => {
         />
       </View>
       <PlaybackError error={error} />
-    </View>
+    </>
   );
 };
 

@@ -3,50 +3,54 @@
     "id": 1,
     "deviceId": "ABC123"
   },
-  "tasks": [
+  "bubbles": [
     {
       "id": 1,
-      "name": "Tinker Timer list",
-      "intervals": [{
-        "id": 1,
-        "date": "2023-08-02",
-        "hour": 22,
-        "quarter": 1
-      },
-      {
-        "id": 2,
-        "date": "2023-08-01",
-        "hour": 23,
-        "quarter": 4
-      },
-      {
-        "id": 3,
-        "date": "2023-08-01",
-        "hour": 19,
-        "quarter": 1
-      }]
+      "title": "Bubble timer data modeling",
+      "slot": 0,
+      "date": "2023-08-02",
+      "hour": 22,
+      "quarter": 1
     },
     {
       "id": 2,
-      "name": "UI Component Library",
-      "intervals": [{
-        "id": 4,
-        "date": "2023-08-02",
-        "hour": 23,
-        "quarter": 1
-      },
-      {
-        "id": 5,
-        "date": "2023-08-02",
-        "hour": 23,
-        "quarter": 2
-      },
-      {
-        "id": 6,
-        "date": "2023-08-01",
-        "hour": 21,
-        "quarter": 3
-      }]
+      "title": "Bubble timer data modeling",
+      "slot": 0,
+      "date": "2023-08-01",
+      "hour": 23,
+      "quarter": 4
+    },
+    {
+      "id": 3,
+      "title": "Bubble timer data modeling",
+      "slot": 0,
+      "date": "2023-08-01",
+      "hour": 19,
+      "quarter": 1
+    },
+    {
+      "id": 4,
+      "title": "UI state management",
+      "slot": 1,
+      "date": "2023-08-02",
+      "hour": 23,
+      "quarter": 1
+    },
+    {
+      "id": 5,
+      "title": "UI state management",
+      "slot": 1,
+      "date": "2023-08-02",
+      "hour": 23,
+      "quarter": 2
+    },
+    {
+      "id": 6,
+      "title": "UI state management",
+      "slot": 1,
+      "date": "2023-08-01",
+      "hour": 21,
+      "quarter": 3
     }
   ]
 }

@@ -5,89 +5,108 @@ import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '.';
 
 import data from '../assets/resources/data.json';
+import {findBubble, findTask, generateId} from '../utils/tasks';
+import {storeBubbles, storeCurrentTasks} from './storage';
 
-export interface Interval {
-  id?: number;
+const NUM_SLOTS = 10;
+
+export interface Bubble {
+  id: number;
+  title: string;
+  slot: number;
   date: string;
   hour: number;
   quarter: number;
 }
 
-export interface Task {
-  id?: number;
-  slot?: number;
-  name: string;
-  intervals: Interval[];
+interface Task {
+  title: string;
+  slot: number;
 }
 
-interface TasksState {
-  tasks: Task[];
+interface BubblesState {
+  bubbles: Bubble[];
+  currentTasks: Task[];
 }
 
-const initialState: TasksState = {
-  tasks: data.tasks,
+const initialState: BubblesState = {
+  bubbles: [],
+  currentTasks: [],
 };
 
 export const slice = createSlice({
-  name: 'tasks',
+  name: 'bubbles',
   initialState,
   reducers: {
-    addInterval: (state, action) => {
-      const {task, date, hour, quarter} = action.payload;
-      state.tasks[task.id].intervals.push({
-        date,
-        hour,
-        quarter,
+    createBubble: (state, action) => {
+      const {slot} = action.payload;
+      const bubble = {
+        id: generateId(),
+        title: findTask(state.currentTasks)(slot)?.title || '',
+        ...action.payload,
+      };
+      state.bubbles.push(bubble);
+      storeBubbles(state.bubbles);
+    },
+    deleteBubble: (state, action) => {
+      const {id} = action.payload;
+      const bubbleIdx = state.bubbles.findIndex(b => b.id === id);
+      state.bubbles.splice(bubbleIdx, 1);
+      storeBubbles(state.bubbles);
+    },
+    setBubbles: (state, action) => {
+      state.bubbles = action.payload;
+    },
+    setCurrentTasks: (state, action) => {
+      state.currentTasks = action.payload;
+    },
+    setTaskTitle: (state, action) => {
+      const {date, hour, slot, title} = action.payload;
+      state.bubbles.forEach(b => {
+        if (b.date === date && b.hour === hour && b.slot === slot) {
+          b.title = title;
+        }
       });
-      return state;
-    },
-    addTask: (state, action) => {
-      const {task} = action.payload;
-      state.tasks[task.id] = task;
-    },
-    removeTask: (state, action) => {
-      const {task} = action.payload;
-      state.tasks[task.id] = task;
-    },
-    toggleInterval: (state, action) => {
-      const {date, hour, quarter, slot} = action.payload;
-      let task = state.tasks[slot];
-      if (!task) {
-        task = {name: '', intervals: []};
-      }
-      const intervalIdx = task.intervals.findIndex(
-        ti => ti.date === date && ti.hour === hour && ti.quarter === quarter,
-      );
-      if (intervalIdx !== -1) {
-        task.intervals.splice(intervalIdx, 1);
+
+      const taskIdx = state.currentTasks.findIndex(t => t.slot === slot);
+      if (taskIdx !== -1) {
+        state.currentTasks[taskIdx].title = title;
       } else {
-        task.intervals.push({date, hour, quarter});
+        state.currentTasks.push({title, slot});
       }
-      state.tasks[slot] = task;
-      return state;
-    },
-    update: state => {
-      return state;
-    },
-    updateTask: (state, action) => {
-      const {task} = action.payload;
-      state.tasks[task.id] = task;
+
+      storeCurrentTasks(state.currentTasks);
     },
   },
 });
 
 export const {
-  addInterval,
-  addTask,
-  removeTask,
-  toggleInterval,
-  update,
-  updateTask,
+  createBubble,
+  deleteBubble,
+  setBubbles,
+  setCurrentTasks,
+  setTaskTitle,
 } = slice.actions;
 
 const selectTasksState = (state: RootState) => state.tasks;
 export const useTasksState = () => useSelector(selectTasksState);
 
-export const useTasks = () => useTasksState().tasks;
+const selectBubbles = (state: RootState) => state.tasks.bubbles;
+export const useBubbles = () => useSelector(selectBubbles);
+
+export const useBubble = ({date, hour, slot, quarter}) => {
+  const bubbles = useBubbles();
+  return findBubble(bubbles)({date, hour, slot, quarter});
+};
+
+const selectCurrentTasks = (state: RootState) => state.tasks.currentTasks;
+export const useCurrentTasks = () => useSelector(selectCurrentTasks);
+
+export const useTasks = () => {
+  const currentTasks = useCurrentTasks();
+  const findOrCreateTask = (title, slot) =>
+    findTask(currentTasks)(slot) || {title, slot};
+  return Array(NUM_SLOTS).fill('').map(findOrCreateTask);
+};
 
 export const reducer = slice.reducer;

@@ -5,18 +5,14 @@ import {Colors, View} from 'react-native-ui-lib';
 import {Task} from './Task';
 import {useTasks} from '../store/tasks';
 
-const NUM_TASKS = 10;
-
 export const Tasks: React.FC = () => {
   const tasks = useTasks();
 
   return (
     <View style={styles.container}>
-      {Array(NUM_TASKS)
-        .fill('')
-        .map((_, idx) => (
-          <Task key={`task-${idx}`} task={tasks[idx]} slot={idx} />
-        ))}
+      {tasks.map(({title, slot}) => (
+        <Task key={`task-${slot}`} title={title} slot={slot} />
+      ))}
     </View>
   );
 };

@@ -1,9 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import {Colors, View} from 'react-native-ui-lib';
+import {useDispatch} from 'react-redux';
 
 import {Tasks} from './components';
 import {CountdownTimer, PlayerControls} from './components';
+import {setBubbles, setCurrentTasks} from './store/tasks';
+import {retrieveBubbles, retrieveCurrentTasks} from './store/storage';
 
 // Initialize theme
 Colors.loadColors({
@@ -13,6 +16,17 @@ Colors.loadColors({
 });
 
 const App: React.FC = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    (async () => {
+      const bubbles = await retrieveBubbles();
+      const currentTasks = await retrieveCurrentTasks();
+      dispatch(setBubbles(bubbles));
+      dispatch(setCurrentTasks(currentTasks));
+    })();
+  }, [dispatch]);
+
   return (
     <View style={styles.container}>
       <CountdownTimer />

@@ -3,21 +3,23 @@ import {Pressable, StyleSheet} from 'react-native';
 import {Colors, View} from 'react-native-ui-lib';
 import {useDispatch} from 'react-redux';
 
-import {stopChime} from '../store/countdown';
-import {toggleInterval} from '../store/tasks';
+import {stopChime, useQuarter} from '../../store/countdown';
+import {createBubble, deleteBubble, useBubble} from '../../store/tasks';
 
-const Bubble = ({interval, isFilled, showLine}) => {
-  const {date, hour, quarter, slot} = interval;
-
+const Bubble = ({date, hour, slot, quarter}) => {
   const dispatch = useDispatch();
+  const shouldShowLine = quarter === useQuarter();
+  const bubble = useBubble({date, hour, slot, quarter});
 
   const handlePress = () => {
-    dispatch(toggleInterval({date, hour, quarter, slot}));
     dispatch(stopChime());
+    dispatch(
+      bubble ? deleteBubble(bubble) : createBubble({date, hour, slot, quarter}),
+    );
   };
 
   const ovalStyles = [styles.oval];
-  if (isFilled) {
+  if (bubble) {
     ovalStyles.push(styles.filled);
   }
   return (
@@ -25,7 +27,7 @@ const Bubble = ({interval, isFilled, showLine}) => {
       <Pressable onPress={() => handlePress()} hitSlop={10}>
         {({pressed}) => (
           <>
-            {showLine && <View style={styles.line} />}
+            {shouldShowLine && <View style={styles.line} />}
             <View style={ovalStyles}>
               {pressed && <View style={styles.pressed} />}
             </View>
