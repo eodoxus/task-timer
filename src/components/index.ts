@@ -1,4 +1,3 @@
-export * from './Button';
+export * from './Controls';
 export * from './CountdownTimer';
-export * from './PlayerControls';
 export * from './Tasks';

@@ -4,7 +4,7 @@ import Sound from 'react-native-sound';
 // Enable playback in silence mode
 Sound.setCategory('Playback');
 
-import asset from '../assets/resources/tinker-bell.mp3';
+import asset from '../../assets/resources/tinkerBell.mp3';
 
 export function useTinkerBell() {
   const [sound, setSound] = useState(null);

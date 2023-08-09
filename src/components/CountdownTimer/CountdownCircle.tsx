@@ -6,7 +6,7 @@ import {useCountdown} from './useCountdown';
 import {getWrapperStyle, timeStyle} from './utils';
 import type {Props} from './types';
 
-const CountdownCircleTimer = (props: Props) => {
+export const CountdownCircle = (props: Props) => {
   const {children, duration, strokeLinecap, trailColor, trailStrokeWidth} =
     props;
   const {
@@ -50,6 +50,4 @@ const CountdownCircleTimer = (props: Props) => {
   );
 };
 
-CountdownCircleTimer.displayName = 'CountdownCircleTimer';
-
-export {CountdownCircleTimer, useCountdown};
+CountdownCircle.displayName = 'CountdownCircle';

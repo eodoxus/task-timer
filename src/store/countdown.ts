@@ -3,8 +3,16 @@ import {useSelector} from 'react-redux';
 import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '.';
 import {pad} from '../utils/string';
+import {storeMuteState} from './storage';
+import {MINUTE} from '../utils/time';
 
 const TASK_INTERVAL_LENGTH = 15;
+
+export enum MuteState {
+  Sound,
+  Mute,
+  Vibrate,
+}
 
 interface DateProps {
   interval: number;
@@ -15,6 +23,7 @@ interface DateProps {
   hour: number;
   minute: number;
   quarter: number;
+  remainingSeconds: number;
   isPm: boolean;
   meridiem: string;
 }
@@ -22,7 +31,7 @@ interface DateProps {
 interface CountdownState extends DateProps {
   intervalLength: number;
   isChiming: boolean;
-  isMuted: boolean;
+  muteState: MuteState;
 }
 
 const updateDateProps = (intervalLength: number): DateProps => {
@@ -30,6 +39,10 @@ const updateDateProps = (intervalLength: number): DateProps => {
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
   const day = now.getDate();
+  const currentMinute = now.getMinutes();
+  const remainingMinutes = intervalLength - (currentMinute % intervalLength);
+  const remainingSeconds =
+    (remainingMinutes - 1) * MINUTE + (MINUTE - now.getSeconds());
   const isPm = now.getHours() >= 12;
 
   return {
@@ -41,6 +54,7 @@ const updateDateProps = (intervalLength: number): DateProps => {
     hour: now.getHours(),
     minute: now.getMinutes(),
     quarter: Math.floor(now.getMinutes() / 15) + 1,
+    remainingSeconds,
     isPm,
     meridiem: isPm ? 'PM' : 'AM',
   };
@@ -49,7 +63,7 @@ const updateDateProps = (intervalLength: number): DateProps => {
 const initialState: CountdownState = {
   intervalLength: TASK_INTERVAL_LENGTH,
   isChiming: false,
-  isMuted: false,
+  muteState: MuteState.Sound,
   ...updateDateProps(TASK_INTERVAL_LENGTH),
 };
 
@@ -57,15 +71,25 @@ export const slice = createSlice({
   name: 'countdown',
   initialState,
   reducers: {
-    mute: state => {
-      state.isMuted = true;
+    cycleMuteState: state => {
+      switch (state.muteState) {
+        case MuteState.Sound:
+          state.muteState = MuteState.Mute;
+          break;
+        case MuteState.Mute:
+          state.muteState = MuteState.Vibrate;
+          break;
+        default:
+          state.muteState = MuteState.Sound;
+      }
       state.isChiming = false;
+      storeMuteState(state.muteState);
     },
-    unmute: state => {
-      state.isMuted = false;
+    setMuteState: (state, action) => {
+      state.muteState = action.payload;
     },
     startChime: state => {
-      if (state.isMuted) {
+      if (state.muteState !== MuteState.Sound) {
         return;
       }
       state.isChiming = true;
@@ -82,7 +106,8 @@ export const slice = createSlice({
   },
 });
 
-export const {mute, unmute, startChime, stopChime, update} = slice.actions;
+export const {cycleMuteState, setMuteState, startChime, stopChime, update} =
+  slice.actions;
 
 const selectCountdownState = (state: RootState) => state.countdown;
 export const useCountdownState = () => useSelector(selectCountdownState);
@@ -102,7 +127,7 @@ export const useQuarter = () => useSelector(selectQuarter);
 const selectIsChiming = (state: RootState) => state.countdown.isChiming;
 export const useIsChiming = () => useSelector(selectIsChiming);
 
-const selectIsMuted = (state: RootState) => state.countdown.isMuted;
-export const useIsMuted = () => useSelector(selectIsMuted);
+const selectMuteState = (state: RootState) => state.countdown.muteState;
+export const useMuteState = () => useSelector(selectMuteState);
 
 export const reducer = slice.reducer;

@@ -40,8 +40,8 @@ const Bubble = ({date, hour, slot, quarter}) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: 38,
-    marginLeft: 10,
+    width: 30,
+    marginLeft: 5,
   },
   oval: {
     borderRadius: 20,
@@ -63,10 +63,10 @@ const styles = StyleSheet.create({
   },
   line: {
     width: 2,
-    height: 51,
+    height: 41,
     position: 'absolute',
-    top: -10,
-    left: 19,
+    top: -5,
+    left: 15,
     backgroundColor: Colors.quarterLine,
     zIndex: 1,
   },

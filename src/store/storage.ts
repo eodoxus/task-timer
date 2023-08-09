@@ -39,3 +39,23 @@ export const storeCurrentTasks = async tasks => {
     console.error(`Error storing current tasks to storage`, error);
   }
 };
+
+export const retrieveMuteState = async () => {
+  try {
+    const value = await AsyncStorage.getItem('MUTE_STATE');
+    if (value !== null) {
+      return JSON.parse(value);
+    }
+  } catch (error) {
+    console.error(`Error retrieving mute state from storage`, error);
+  }
+  return 0;
+};
+
+export const storeMuteState = async muteState => {
+  try {
+    await AsyncStorage.setItem('MUTE_STATE', JSON.stringify(muteState));
+  } catch (error) {
+    console.error(`Error storing mute state to storage`, error);
+  }
+};

@@ -19,7 +19,7 @@ export const Tasks: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    height: '63%',
+    height: '59%',
     borderTopWidth: 1,
     borderBottomWidth: 1,
     borderColor: Colors.$outlineDefault,

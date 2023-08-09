@@ -4,11 +4,10 @@ import {createSlice} from '@reduxjs/toolkit';
 
 import {RootState} from '.';
 
-import data from '../assets/resources/data.json';
 import {findBubble, findTask, generateId} from '../utils/tasks';
 import {storeBubbles, storeCurrentTasks} from './storage';
 
-const NUM_SLOTS = 10;
+const NUM_SLOTS = 9;
 
 export interface Bubble {
   id: number;

@@ -42,7 +42,7 @@ export const Task = ({title, slot}) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    padding: 5,
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderColor: Colors.$outlineDefault,

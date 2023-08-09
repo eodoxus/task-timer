@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-export const PlaybackError = ({error}) => {
+export const Error = ({error}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>{error}</Text>
