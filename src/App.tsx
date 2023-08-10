@@ -12,6 +12,7 @@ import {
   retrieveMuteState,
 } from './store/storage';
 import {setMuteState} from './store/countdown';
+import {releaseSound} from './store/sound';
 
 // Initialize theme
 Colors.loadColors({
@@ -32,6 +33,10 @@ const App: React.FC = () => {
       dispatch(setCurrentTasks(currentTasks));
       dispatch(setMuteState(muteState));
     })();
+
+    return () => {
+      releaseSound();
+    };
   }, [dispatch]);
 
   return (

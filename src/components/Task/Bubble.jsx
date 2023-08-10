@@ -3,7 +3,7 @@ import {Pressable, StyleSheet} from 'react-native';
 import {Colors, View} from 'react-native-ui-lib';
 import {useDispatch} from 'react-redux';
 
-import {stopChime, useQuarter} from '../../store/countdown';
+import {stopAlarm, useQuarter} from '../../store/countdown';
 import {createBubble, deleteBubble, useBubble} from '../../store/tasks';
 
 const Bubble = ({date, hour, slot, quarter}) => {
@@ -12,7 +12,7 @@ const Bubble = ({date, hour, slot, quarter}) => {
   const bubble = useBubble({date, hour, slot, quarter});
 
   const handlePress = () => {
-    dispatch(stopChime());
+    dispatch(stopAlarm());
     dispatch(
       bubble ? deleteBubble(bubble) : createBubble({date, hour, slot, quarter}),
     );

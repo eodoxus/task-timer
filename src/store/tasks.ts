@@ -7,7 +7,7 @@ import {RootState} from '.';
 import {findBubble, findTask, generateId} from '../utils/tasks';
 import {storeBubbles, storeCurrentTasks} from './storage';
 
-const NUM_SLOTS = 9;
+const NUM_SLOTS = 15;
 
 export interface Bubble {
   id: number;

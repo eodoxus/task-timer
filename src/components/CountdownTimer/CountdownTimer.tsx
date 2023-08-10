@@ -4,23 +4,21 @@ import {Colors, Text, View} from 'react-native-ui-lib';
 import {useDispatch} from 'react-redux';
 
 import {CountdownCircle} from './CountdownCircle';
-import {MINUTE} from '../../utils/time';
+import {MINUTE, SECOND} from '../../utils/time';
 import {pad} from '../../utils/string';
 import {
   MuteState,
   cycleMuteState,
-  startChime,
+  startAlarm,
   update as updateCountdown,
   useCountdownState,
-  useIsChiming,
   useMuteState,
 } from '../../store/countdown';
-import {useTinkerBell} from './useTinkerBell';
 import {Volume} from './MuteState/Volume';
 import {Muted} from './MuteState/Muted';
 import {Vibrate} from './MuteState/Vibrate';
 
-const formatRemainingTime = (remainingTime: number) => {
+const formatRemainingSeconds = (remainingTime: number) => {
   const minutes = Math.floor(remainingTime / MINUTE);
   const seconds = remainingTime % MINUTE;
   return `${pad(minutes)}:${pad(seconds)}`;
@@ -52,16 +50,19 @@ export const CountdownTimer: React.FC = () => {
     meridiem,
     remainingSeconds,
   } = useCountdownState();
-  const isChiming = useIsChiming();
   const muteState = useMuteState();
-  const {start, stop} = useTinkerBell();
 
-  const handleVolumePress = () => dispatch(cycleMuteState());
+  const handlePress = () => dispatch(cycleMuteState());
 
-  useEffect(() => (isChiming ? start() : stop()), [start, stop, isChiming]);
+  useEffect(() => {
+    const interval = setInterval(() => dispatch(updateCountdown()), SECOND);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [dispatch]);
 
   return (
-    <Pressable onPress={handleVolumePress}>
+    <Pressable onPress={handlePress}>
       <View style={styles.container}>
         <CountdownCircle
           isPlaying
@@ -71,15 +72,13 @@ export const CountdownTimer: React.FC = () => {
           rotation="counterclockwise"
           strokeLinecap="round"
           onComplete={() => {
-            dispatch(updateCountdown());
-            dispatch(startChime());
+            dispatch(startAlarm());
             return {shouldRepeat: true};
-          }}
-          onUpdate={() => dispatch(updateCountdown())}>
-          {({remainingTime}: any) => (
+          }}>
+          {() => (
             <>
               <Text style={styles.remainingTime}>
-                {formatRemainingTime(remainingTime)}
+                {formatRemainingSeconds(remainingSeconds)}
               </Text>
               <Text style={styles.time}>
                 {formatTime(hour, minute, meridiem)}

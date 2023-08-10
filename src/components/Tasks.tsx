@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
 import {Colors, View} from 'react-native-ui-lib';
 
 import {Task} from './Task';
@@ -10,9 +10,11 @@ export const Tasks: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      {tasks.map(({title, slot}) => (
-        <Task key={`task-${slot}`} title={title} slot={slot} />
-      ))}
+      <ScrollView>
+        {tasks.map(({title, slot}) => (
+          <Task key={`task-${slot}`} title={title} slot={slot} />
+        ))}
+      </ScrollView>
     </View>
   );
 };

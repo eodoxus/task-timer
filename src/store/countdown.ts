@@ -1,10 +1,12 @@
 import {useSelector} from 'react-redux';
+import {Vibration} from 'react-native';
 
 import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '.';
 import {pad} from '../utils/string';
 import {storeMuteState} from './storage';
 import {MINUTE} from '../utils/time';
+import {startSound, stopSound} from './sound';
 
 const TASK_INTERVAL_LENGTH = 15;
 
@@ -31,6 +33,7 @@ interface DateProps {
 interface CountdownState extends DateProps {
   intervalLength: number;
   isChiming: boolean;
+  isVibrating: boolean;
   muteState: MuteState;
 }
 
@@ -63,7 +66,8 @@ const updateDateProps = (intervalLength: number): DateProps => {
 const initialState: CountdownState = {
   intervalLength: TASK_INTERVAL_LENGTH,
   isChiming: false,
-  muteState: MuteState.Sound,
+  isVibrating: false,
+  muteState: MuteState.Mute,
   ...updateDateProps(TASK_INTERVAL_LENGTH),
 };
 
@@ -78,26 +82,40 @@ export const slice = createSlice({
           break;
         case MuteState.Mute:
           state.muteState = MuteState.Vibrate;
+          Vibration.vibrate();
           break;
         default:
           state.muteState = MuteState.Sound;
       }
       state.isChiming = false;
+      state.isVibrating = false;
       storeMuteState(state.muteState);
     },
     setMuteState: (state, action) => {
       state.muteState = action.payload;
     },
-    startChime: state => {
-      if (state.muteState !== MuteState.Sound) {
-        return;
+    startAlarm: state => {
+      if (state.muteState === MuteState.Sound) {
+        startSound();
+        state.isChiming = true;
+      } else if (state.muteState === MuteState.Vibrate) {
+        Vibration.vibrate();
+        state.isVibrating = true;
       }
-      state.isChiming = true;
     },
-    stopChime: state => {
-      state.isChiming = false;
+    stopAlarm: state => {
+      if (state.muteState === MuteState.Sound) {
+        stopSound();
+        state.isChiming = false;
+      } else if (state.muteState === MuteState.Vibrate) {
+        Vibration.cancel();
+        state.isVibrating = false;
+      }
     },
     update: state => {
+      if (state.isVibrating) {
+        Vibration.vibrate();
+      }
       return {
         ...state,
         ...updateDateProps(state.intervalLength),
@@ -106,7 +124,7 @@ export const slice = createSlice({
   },
 });
 
-export const {cycleMuteState, setMuteState, startChime, stopChime, update} =
+export const {cycleMuteState, setMuteState, startAlarm, stopAlarm, update} =
   slice.actions;
 
 const selectCountdownState = (state: RootState) => state.countdown;
@@ -126,6 +144,9 @@ export const useQuarter = () => useSelector(selectQuarter);
 
 const selectIsChiming = (state: RootState) => state.countdown.isChiming;
 export const useIsChiming = () => useSelector(selectIsChiming);
+
+const selectIsVibrating = (state: RootState) => state.countdown.isVibrating;
+export const useIsVibrating = () => useSelector(selectIsVibrating);
 
 const selectMuteState = (state: RootState) => state.countdown.muteState;
 export const useMuteState = () => useSelector(selectMuteState);
