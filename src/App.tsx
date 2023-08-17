@@ -4,12 +4,12 @@ import {Colors, View} from 'react-native-ui-lib';
 import {useDispatch} from 'react-redux';
 
 import {Tasks} from './components';
-import {CountdownTimer, Controls} from './components';
-import {setBubbles, setCurrentTasks} from './store/tasks';
+import {CountdownTimer} from './components';
+import {setBubbles, setTasks} from './store/tasks';
 import {
   retrieveBubbles,
-  retrieveCurrentTasks,
   retrieveMuteState,
+  retrieveTasks,
 } from './store/storage';
 import {setMuteState} from './store/countdown';
 import {releaseSound} from './store/sound';
@@ -19,6 +19,8 @@ Colors.loadColors({
   timer: '#2584ff',
   filledBubble: '#0052cc',
   quarterLine: '#0052cc',
+  button: '#d9d9d9',
+  disabledButton: '#eaebee',
 });
 
 const App: React.FC = () => {
@@ -27,10 +29,10 @@ const App: React.FC = () => {
   useEffect(() => {
     (async () => {
       const bubbles = await retrieveBubbles();
-      const currentTasks = await retrieveCurrentTasks();
+      const tasks = await retrieveTasks();
       const muteState = await retrieveMuteState();
       dispatch(setBubbles(bubbles));
-      dispatch(setCurrentTasks(currentTasks));
+      dispatch(setTasks(tasks));
       dispatch(setMuteState(muteState));
     })();
 
@@ -43,7 +45,6 @@ const App: React.FC = () => {
     <View style={styles.container}>
       <CountdownTimer />
       <Tasks />
-      <Controls />
     </View>
   );
 };

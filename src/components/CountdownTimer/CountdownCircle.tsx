@@ -2,19 +2,25 @@ import React from 'react';
 import {View} from 'react-native';
 import type {StyleProp, ViewStyle} from 'react-native';
 import Svg, {Path} from 'react-native-svg';
+import {Colors} from 'react-native-ui-lib';
+
 import {useCountdown} from './useCountdown';
 import {getWrapperStyle, timeStyle} from './utils';
-import type {Props} from './types';
 
-export const CountdownCircle = (props: Props) => {
-  const {children, duration, strokeLinecap, trailColor, trailStrokeWidth} =
-    props;
+export const CountdownCircle = props => {
+  const {
+    children,
+    duration,
+    remainingTime,
+    strokeLinecap,
+    trailColor,
+    trailStrokeWidth,
+  } = props;
   const {
     path,
     pathLength,
     stroke,
     strokeDashoffset,
-    remainingTime,
     elapsedTime,
     size,
     strokeWidth,
@@ -26,7 +32,7 @@ export const CountdownCircle = (props: Props) => {
         <Path
           d={path}
           fill="none"
-          stroke={trailColor ?? '#d9d9d9'}
+          stroke={trailColor ?? Colors.button}
           strokeWidth={trailStrokeWidth ?? strokeWidth}
         />
         {elapsedTime !== duration && (

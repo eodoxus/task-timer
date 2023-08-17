@@ -1,17 +1,17 @@
 import {useSelector} from 'react-redux';
-
 import {createSlice} from '@reduxjs/toolkit';
 
 import {RootState} from '.';
-
-import {findBubble, findTask, generateId} from '../utils/tasks';
-import {storeBubbles, storeCurrentTasks} from './storage';
-
-const NUM_SLOTS = 15;
+import {
+  makeFindBubble as findBubble,
+  makeFindTask as findTask,
+  generateId,
+} from '../utils/tasks';
+import {storeBubbles, storeTasks} from './storage';
+import Bubble from '../components/Task/Bubble';
 
 export interface Bubble {
   id: number;
-  title: string;
   slot: number;
   date: string;
   hour: number;
@@ -19,18 +19,20 @@ export interface Bubble {
 }
 
 interface Task {
+  id: number;
   title: string;
   slot: number;
+  date: string;
 }
 
 interface BubblesState {
   bubbles: Bubble[];
-  currentTasks: Task[];
+  tasks: Task[];
 }
 
 const initialState: BubblesState = {
   bubbles: [],
-  currentTasks: [],
+  tasks: [],
 };
 
 export const slice = createSlice({
@@ -38,10 +40,8 @@ export const slice = createSlice({
   initialState,
   reducers: {
     createBubble: (state, action) => {
-      const {slot} = action.payload;
       const bubble = {
         id: generateId(),
-        title: findTask(state.currentTasks)(slot)?.title || '',
         ...action.payload,
       };
       state.bubbles.push(bubble);
@@ -56,36 +56,28 @@ export const slice = createSlice({
     setBubbles: (state, action) => {
       state.bubbles = action.payload;
     },
-    setCurrentTasks: (state, action) => {
-      state.currentTasks = action.payload;
+    setTasks: (state, action) => {
+      state.tasks = action.payload;
     },
-    setTaskTitle: (state, action) => {
-      const {date, hour, slot, title} = action.payload;
-      state.bubbles.forEach(b => {
-        if (b.date === date && b.hour === hour && b.slot === slot) {
-          b.title = title;
-        }
-      });
-
-      const taskIdx = state.currentTasks.findIndex(t => t.slot === slot);
-      if (taskIdx !== -1) {
-        state.currentTasks[taskIdx].title = title;
+    upsertTask: (state, action) => {
+      const {title} = action.payload;
+      const task = findTask(state.tasks)(action.payload);
+      if (task) {
+        task.title = title;
       } else {
-        state.currentTasks.push({title, slot});
+        state.tasks.push({
+          id: generateId(),
+          ...action.payload,
+        });
       }
 
-      storeCurrentTasks(state.currentTasks);
+      storeTasks(state.tasks);
     },
   },
 });
 
-export const {
-  createBubble,
-  deleteBubble,
-  setBubbles,
-  setCurrentTasks,
-  setTaskTitle,
-} = slice.actions;
+export const {createBubble, deleteBubble, setBubbles, setTasks, upsertTask} =
+  slice.actions;
 
 const selectTasksState = (state: RootState) => state.tasks;
 export const useTasksState = () => useSelector(selectTasksState);
@@ -93,19 +85,27 @@ export const useTasksState = () => useSelector(selectTasksState);
 const selectBubbles = (state: RootState) => state.tasks.bubbles;
 export const useBubbles = () => useSelector(selectBubbles);
 
-export const useBubble = ({date, hour, slot, quarter}) => {
+export const useBubble = ({
+  date,
+  hour,
+  slot,
+  quarter,
+}: {
+  date: string;
+  hour: number;
+  slot: number;
+  quarter: number;
+}) => {
   const bubbles = useBubbles();
   return findBubble(bubbles)({date, hour, slot, quarter});
 };
 
-const selectCurrentTasks = (state: RootState) => state.tasks.currentTasks;
-export const useCurrentTasks = () => useSelector(selectCurrentTasks);
+const selectTasks = (state: RootState) => state.tasks.tasks;
+export const useTasks = () => useSelector(selectTasks);
 
-export const useTasks = () => {
-  const currentTasks = useCurrentTasks();
-  const findOrCreateTask = (title, slot) =>
-    findTask(currentTasks)(slot) || {title, slot};
-  return Array(NUM_SLOTS).fill('').map(findOrCreateTask);
+export const useTask = (date: string, slot: number) => {
+  const tasks = useTasks();
+  return tasks.find(t => t.date === date && t.slot === slot);
 };
 
 export const reducer = slice.reducer;

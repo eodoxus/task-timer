@@ -26,8 +26,6 @@ interface DateProps {
   minute: number;
   quarter: number;
   remainingSeconds: number;
-  isPm: boolean;
-  meridiem: string;
 }
 
 interface CountdownState extends DateProps {
@@ -46,7 +44,6 @@ const updateDateProps = (intervalLength: number): DateProps => {
   const remainingMinutes = intervalLength - (currentMinute % intervalLength);
   const remainingSeconds =
     (remainingMinutes - 1) * MINUTE + (MINUTE - now.getSeconds());
-  const isPm = now.getHours() >= 12;
 
   return {
     interval: Math.ceil(now.getMinutes() / intervalLength),
@@ -57,9 +54,7 @@ const updateDateProps = (intervalLength: number): DateProps => {
     hour: now.getHours(),
     minute: now.getMinutes(),
     quarter: Math.floor(now.getMinutes() / 15) + 1,
-    remainingSeconds,
-    isPm,
-    meridiem: isPm ? 'PM' : 'AM',
+    remainingSeconds: Math.floor(remainingSeconds),
   };
 };
 
@@ -116,8 +111,23 @@ export const slice = createSlice({
       if (state.isVibrating) {
         Vibration.vibrate();
       }
+
+      let {isChiming, isVibrating} = state;
+      if (state.remainingSeconds === 1) {
+        if (state.muteState === MuteState.Sound) {
+          startSound();
+          isChiming = true;
+        }
+        if (state.muteState === MuteState.Vibrate) {
+          Vibration.vibrate();
+          isVibrating = true;
+        }
+      }
+
       return {
         ...state,
+        isChiming,
+        isVibrating,
         ...updateDateProps(state.intervalLength),
       };
     },
@@ -133,6 +143,15 @@ export const useCountdownState = () => useSelector(selectCountdownState);
 const selectDate = (state: RootState) => state.countdown.date;
 export const useDate = () => useSelector(selectDate);
 
+const selectYear = (state: RootState) => state.countdown.year;
+export const useYear = () => useSelector(selectYear);
+
+const selectMonth = (state: RootState) => state.countdown.month;
+export const useMonth = () => useSelector(selectMonth);
+
+const selectDay = (state: RootState) => state.countdown.day;
+export const useDay = () => useSelector(selectDay);
+
 const selectHour = (state: RootState) => state.countdown.hour;
 export const useHour = () => useSelector(selectHour);
 
@@ -142,6 +161,10 @@ export const useMinute = () => useSelector(selectMinute);
 const selectQuarter = (state: RootState) => state.countdown.quarter;
 export const useQuarter = () => useSelector(selectQuarter);
 
+const selectIntervalLength = (state: RootState) =>
+  state.countdown.intervalLength;
+export const useIntervalLength = () => useSelector(selectIntervalLength);
+
 const selectIsChiming = (state: RootState) => state.countdown.isChiming;
 export const useIsChiming = () => useSelector(selectIsChiming);
 
@@ -150,5 +173,9 @@ export const useIsVibrating = () => useSelector(selectIsVibrating);
 
 const selectMuteState = (state: RootState) => state.countdown.muteState;
 export const useMuteState = () => useSelector(selectMuteState);
+
+const selectRemainingSeconds = (state: RootState) =>
+  state.countdown.remainingSeconds;
+export const useRemainingSeconds = () => useSelector(selectRemainingSeconds);
 
 export const reducer = slice.reducer;

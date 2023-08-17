@@ -1,7 +1,4 @@
-import {useRef} from 'react';
-import {useElapsedTime} from 'use-elapsed-time';
-import {getPathProps, getStartAt} from './utils';
-import type {Props, ColorFormat} from './types';
+import {getPathProps} from './utils';
 
 const linearEase = (
   time: number,
@@ -28,7 +25,7 @@ const getRGB = (color: string) =>
     .match(/.{2}/g)
     ?.map(x => parseInt(x, 16)) ?? [];
 
-const getStroke = (props: Props, remainingTime: number): ColorFormat => {
+const getStroke = (props, remainingTime: number) => {
   const {colors, colorsTime, isSmoothColorTransition = true} = props;
   if (typeof colors === 'string') {
     return colors;
@@ -67,65 +64,28 @@ const getStroke = (props: Props, remainingTime: number): ColorFormat => {
     .join(',')})`;
 };
 
-export const useCountdown = (props: Props) => {
+export const useCountdown = props => {
   const {
     duration,
-    initialRemainingTime,
-    updateInterval,
+    remainingTime = 0,
     size = 180,
     strokeWidth = 12,
     trailStrokeWidth,
-    isPlaying = false,
     isGrowing = false,
     rotation = 'clockwise',
-    onComplete,
-    onUpdate,
   } = props;
-  const remainingTimeRef = useRef<number>();
   const maxStrokeWidth = Math.max(strokeWidth, trailStrokeWidth ?? 0);
   const {path, pathLength} = getPathProps(size, maxStrokeWidth, rotation);
 
-  const {elapsedTime} = useElapsedTime({
-    isPlaying,
-    duration,
-    startAt: getStartAt(duration, initialRemainingTime),
-    updateInterval,
-    onUpdate:
-      typeof onUpdate === 'function'
-        ? (elapsedTime: number) => {
-            const remainingTime = Math.ceil(duration - elapsedTime);
-            if (remainingTime !== remainingTimeRef.current) {
-              remainingTimeRef.current = remainingTime;
-              onUpdate(remainingTime);
-            }
-          }
-        : undefined,
-    onComplete:
-      typeof onComplete === 'function'
-        ? (totalElapsedTime: number) => {
-            const {shouldRepeat, delay, newInitialRemainingTime} =
-              onComplete(totalElapsedTime) ?? {};
-            if (shouldRepeat) {
-              return {
-                shouldRepeat,
-                delay,
-                newStartAt: getStartAt(duration, newInitialRemainingTime),
-              };
-            }
-          }
-        : undefined,
-  });
-
-  const remainingTimeRow = duration - elapsedTime;
+  const elapsedTime = duration - remainingTime;
 
   return {
     elapsedTime,
     path,
     pathLength,
-    remainingTime: Math.ceil(remainingTimeRow),
     rotation,
     size,
-    stroke: getStroke(props, remainingTimeRow),
+    stroke: getStroke(props, remainingTime),
     strokeDashoffset: linearEase(
       elapsedTime,
       0,

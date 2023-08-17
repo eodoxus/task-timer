@@ -1,7 +1,8 @@
 import React from 'react';
 import {G, Path, Svg} from 'react-native-svg';
+import {Colors} from 'react-native-ui-lib';
 
-export const Volume = ({size = 25, color = '#d9d9d9'}) => (
+export const Volume = ({size = 25, color = Colors.button}) => (
   <Svg viewBox={`0 0 ${size} ${size}`} width={size} height={size}>
     <G>
       <Path

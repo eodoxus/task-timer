@@ -1,20 +1,20 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {StyleSheet, TextInput} from 'react-native';
 import {Colors, View} from 'react-native-ui-lib';
 import {useDispatch} from 'react-redux';
 
 import Bubble from './Bubble';
-import {setTaskTitle} from '../../store/tasks';
-import {useDate, useHour} from '../../store/countdown';
+import {upsertTask} from '../../store/tasks';
 
-export const Task = ({title, slot}) => {
+export const Task = ({title, date, hour, slot}) => {
   const dispatch = useDispatch();
-  const date = useDate();
-  const hour = useHour();
 
-  const handleOnChangeText = text => {
-    dispatch(setTaskTitle({date, hour, slot, title: text}));
-  };
+  const handleOnChangeText = useCallback(
+    text => {
+      dispatch(upsertTask({date, slot, title: text}));
+    },
+    [date, dispatch, slot],
+  );
 
   return (
     <View style={styles.container}>
@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: Colors.$outlineDefault,
     position: 'relative,',
+    height: 40,
   },
   titleContainer: {
     flexDirection: 'row',

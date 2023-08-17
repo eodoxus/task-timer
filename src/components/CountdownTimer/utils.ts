@@ -1,5 +1,3 @@
-import type {ColorRGB} from './types';
-
 export const getPathProps = (
   size: number,
   strokeWidth: number,
@@ -15,16 +13,6 @@ export const getPathProps = (
   const path = `m ${halfSize},${halfStrokeWith} a ${arcRadius},${arcRadius} 0 ${rotationIndicator} 0,${arcDiameter} a ${arcRadius},${arcRadius} 0 ${rotationIndicator} 0,-${arcDiameter}`;
 
   return {path, pathLength};
-};
-
-export const getStartAt = (duration: number, initialRemainingTime?: number) => {
-  if (duration === 0 || duration === initialRemainingTime) {
-    return 0;
-  }
-
-  return typeof initialRemainingTime === 'number'
-    ? duration - initialRemainingTime
-    : 0;
 };
 
 export const getWrapperStyle = (size: number): React.CSSProperties => ({
@@ -44,15 +32,11 @@ export const timeStyle: React.CSSProperties = {
   height: '100%',
 };
 
-export const getIsColorBetweenColors = (
-  color: ColorRGB,
-  start: ColorRGB,
-  end: ColorRGB,
-) => {
+export const getIsColorBetweenColors = (color, start, end) => {
   const getIsInRange = (x: number, min: number, max: number) =>
     (x - min) * (x - max) <= 0;
 
-  const getRGB = (color: ColorRGB): number[] =>
+  const getRGB = (color): number[] =>
     color
       .match(/(\d+),(\d+),(\d+)/)!
       .splice(1, 4)

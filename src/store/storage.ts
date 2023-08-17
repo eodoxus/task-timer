@@ -20,7 +20,7 @@ export const storeBubbles = async bubbles => {
   }
 };
 
-export const retrieveCurrentTasks = async () => {
+export const retrieveTasks = async () => {
   try {
     const value = await AsyncStorage.getItem('TASKS');
     if (value !== null) {
@@ -32,7 +32,7 @@ export const retrieveCurrentTasks = async () => {
   return [{title: 'My first task', slot: 0}];
 };
 
-export const storeCurrentTasks = async tasks => {
+export const storeTasks = async tasks => {
   try {
     await AsyncStorage.setItem('TASKS', JSON.stringify(tasks));
   } catch (error) {
