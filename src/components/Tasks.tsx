@@ -149,7 +149,7 @@ export const Tasks: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    height: '60%',
+    height: Dimensions.get('window').height - 200,
   },
   dateTimeContainer: {
     top: -25,
@@ -180,9 +180,14 @@ const styles = StyleSheet.create({
   },
   tasks: {
     width: VIEWPORT_WIDTH,
+    paddingBottom: 80,
   },
   controls: {
-    marginTop: 20,
+    paddingTop: 20,
+    paddingBottom: 30,
+    position: 'absolute',
+    bottom: 35,
     width: '100%',
+    backgroundColor: Colors.$backgroundNeutral,
   },
 });

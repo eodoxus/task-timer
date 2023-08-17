@@ -63,7 +63,7 @@ export const CountdownTimer: React.FC = () => {
           colors={Colors.timer}
           rotation="counterclockwise"
           strokeLinecap="round"
-          size={155}
+          size={150}
           onComplete={() => {
             return {shouldRepeat: true};
           }}>
@@ -98,13 +98,13 @@ const styles = StyleSheet.create({
     color: Colors.timer,
     fontSize: 25,
     fontWeight: '600',
-    top: -5,
+    top: -10,
   },
   time: {
     color: Colors.$textNeutralLight,
     fontSize: 16,
     position: 'relative',
-    top: 5,
+    top: -4,
   },
   volumeContainer: {
     position: 'relative',
