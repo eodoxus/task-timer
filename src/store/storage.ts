@@ -7,7 +7,7 @@ export const retrieveBubbles = async () => {
       return JSON.parse(value);
     }
   } catch (error) {
-    console.error(`Error retrieving bubbles from storage`, error);
+    console.error('Error retrieving bubbles from storage', error);
   }
   return [];
 };
@@ -16,7 +16,7 @@ export const storeBubbles = async bubbles => {
   try {
     await AsyncStorage.setItem('BUBBLES', JSON.stringify(bubbles));
   } catch (error) {
-    console.error(`Error storing bubbles to storage`, error);
+    console.error('Error storing bubbles to storage', error);
   }
 };
 
@@ -27,7 +27,7 @@ export const retrieveTasks = async () => {
       return JSON.parse(value);
     }
   } catch (error) {
-    console.error(`Error retrieving current tasks from storage`, error);
+    console.error('Error retrieving current tasks from storage', error);
   }
   return [{title: 'My first task', slot: 0}];
 };
@@ -36,7 +36,7 @@ export const storeTasks = async tasks => {
   try {
     await AsyncStorage.setItem('TASKS', JSON.stringify(tasks));
   } catch (error) {
-    console.error(`Error storing current tasks to storage`, error);
+    console.error('Error storing current tasks to storage', error);
   }
 };
 
@@ -47,7 +47,7 @@ export const retrieveMuteState = async () => {
       return JSON.parse(value);
     }
   } catch (error) {
-    console.error(`Error retrieving mute state from storage`, error);
+    console.error('Error retrieving mute state from storage', error);
   }
   return 0;
 };
@@ -56,6 +56,6 @@ export const storeMuteState = async muteState => {
   try {
     await AsyncStorage.setItem('MUTE_STATE', JSON.stringify(muteState));
   } catch (error) {
-    console.error(`Error storing mute state to storage`, error);
+    console.error('Error storing mute state to storage', error);
   }
 };

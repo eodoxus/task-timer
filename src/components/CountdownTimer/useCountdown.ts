@@ -52,11 +52,12 @@ const getStroke = (props, remainingTime: number) => {
 
   return `rgb(${startColorRGB
     .map(
-      (color, index) =>
+      (color, idx) =>
+        // eslint-disable-next-line no-bitwise
         linearEase(
           currentTime,
           color,
-          endColorRGB[index] - color,
+          endColorRGB[idx] - color,
           currentDuration,
           isGrowing,
         ) | 0,
