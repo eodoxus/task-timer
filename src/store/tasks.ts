@@ -8,7 +8,6 @@ import {
   generateId,
 } from '../utils/tasks';
 import {storeBubbles, storeTasks} from './storage';
-import Bubble from '../components/Task/Bubble';
 
 export interface Bubble {
   id: number;
@@ -25,12 +24,12 @@ interface Task {
   date: string;
 }
 
-interface BubblesState {
+interface TasksState {
   bubbles: Bubble[];
   tasks: Task[];
 }
 
-const initialState: BubblesState = {
+const initialState: TasksState = {
   bubbles: [],
   tasks: [],
 };

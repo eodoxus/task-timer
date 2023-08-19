@@ -3,8 +3,8 @@ import {StyleSheet} from 'react-native';
 import {Colors, View} from 'react-native-ui-lib';
 import {useDispatch} from 'react-redux';
 
-import {Tasks} from './components';
 import {CountdownTimer} from './components';
+import {NavigatorView} from './components';
 import {setBubbles, setTasks} from './store/tasks';
 import {
   retrieveBubbles,
@@ -44,7 +44,7 @@ const App: React.FC = () => {
   return (
     <View style={styles.container}>
       <CountdownTimer />
-      <Tasks />
+      <NavigatorView />
     </View>
   );
 };

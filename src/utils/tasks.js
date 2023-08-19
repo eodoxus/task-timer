@@ -50,7 +50,7 @@ const getTaskDates = tasks =>
     ),
   );
 
-const makeGetTasksForDate = tasks => date => tasks.filter(t => t.date === date);
+export const makeGetTasksForDate = tasks => date => tasks.filter(t => t.date === date);
 
 export const createTasksForDateIfNoneExist = ({date, tasks}) => {
   const getTasksForDate = makeGetTasksForDate(tasks);

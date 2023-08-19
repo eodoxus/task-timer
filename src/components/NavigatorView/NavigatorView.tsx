@@ -1,26 +1,28 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Dimensions, ScrollView, StyleSheet, Text} from 'react-native';
 import {Colors, View} from 'react-native-ui-lib';
-
-import {Task} from './Task';
-import {useDate, useHour} from '../store/countdown';
-import {
-  generateRange,
-  getCurrentHourDirection,
-  makeFindTask,
-  createTasksForDateIfNoneExist,
-} from '../utils/tasks';
-import {upsertTask, useTasks} from '../store/tasks';
-import {formatDate, formatHourWindow, nextDate, prevDate} from '../utils/time';
-import {Controls} from './Controls';
 import {useDispatch} from 'react-redux';
-import {COUNTDOWN_HEIGHT} from '../utils/constants';
 
-const NUM_TASK_SLOTS = 18;
-const PAGINATION_HOUR_OFFSETS = [-1, 0, 1];
+import {useDate, useHour} from '../../store/countdown';
+import {
+  createTasksForDateIfNoneExist,
+  getCurrentHourDirection,
+  makeGetTasksForDate,
+} from '../../utils/tasks';
+import {
+  formatDate,
+  formatHourWindow,
+  nextDate,
+  prevDate,
+} from '../../utils/time';
+import {Controls} from './Controls';
+import {COUNTDOWN_HEIGHT} from '../../utils/constants';
+import {Tasks} from './Tasks/Tasks';
+import {upsertTask, useTasks} from '../../store/tasks';
+
 const VIEWPORT_WIDTH = Dimensions.get('window').width;
 
-export const Tasks: React.FC = () => {
+export const NavigatorView: React.FC = () => {
   const dispatch = useDispatch();
   const horizontalScrollViewRef = useRef(null);
   const currentDate = useDate();
@@ -30,7 +32,6 @@ export const Tasks: React.FC = () => {
   const [visibleDate, setVisibleDate] = useState(currentDate);
   const [visibleHour, setVisibleHour] = useState(currentHour);
 
-  const findTask = makeFindTask(tasks);
   const prevHour = () => visibleHour - 1;
   const nextHour = () => visibleHour + 1;
 
@@ -95,6 +96,8 @@ export const Tasks: React.FC = () => {
     );
   }, [dispatch, tasks, visibleDate]);
 
+  const getTasksForDate = makeGetTasksForDate(tasks);
+
   return (
     <View style={styles.container}>
       <View style={styles.dateTimeContainer}>
@@ -110,21 +113,11 @@ export const Tasks: React.FC = () => {
           onMomentumScrollEnd={handleScrollEnd}
           keyboardDismissMode="on-drag"
           contentOffset={{x: VIEWPORT_WIDTH, y: 0}}>
-          {PAGINATION_HOUR_OFFSETS.map(hourOffset => (
-            <ScrollView key={visibleHour + hourOffset}>
-              <View style={styles.tasks}>
-                {generateRange(NUM_TASK_SLOTS).map(slot => (
-                  <Task
-                    key={slot}
-                    slot={slot}
-                    date={visibleDate}
-                    hour={visibleHour + hourOffset}
-                    title={findTask({date: visibleDate, slot})?.title || ''}
-                  />
-                ))}
-              </View>
-            </ScrollView>
-          ))}
+          <Tasks
+            date={visibleDate}
+            hour={visibleHour}
+            tasks={getTasksForDate(visibleDate)}
+          />
         </ScrollView>
       </View>
 
@@ -147,7 +140,6 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height - COUNTDOWN_HEIGHT,
   },
   dateTimeContainer: {
-    display: 'none',
     top: -25,
     width: '100%',
   },

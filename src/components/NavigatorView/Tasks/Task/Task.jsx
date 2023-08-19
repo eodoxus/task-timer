@@ -4,7 +4,7 @@ import {Colors, View} from 'react-native-ui-lib';
 import {useDispatch} from 'react-redux';
 
 import Bubble from './Bubble';
-import {upsertTask} from '../../store/tasks';
+import {upsertTask} from '../../../../store/tasks';
 
 export const Task = ({title, date, hour, slot}) => {
   const dispatch = useDispatch();

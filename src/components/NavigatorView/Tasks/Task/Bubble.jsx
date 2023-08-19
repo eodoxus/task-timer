@@ -3,8 +3,8 @@ import {Pressable, StyleSheet} from 'react-native';
 import {Colors, View} from 'react-native-ui-lib';
 import {useDispatch} from 'react-redux';
 
-import {stopAlarm, useHour, useQuarter} from '../../store/countdown';
-import {createBubble, deleteBubble, useBubble} from '../../store/tasks';
+import {stopAlarm, useHour, useQuarter} from '../../../../store/countdown';
+import {createBubble, deleteBubble, useBubble} from '../../../../store/tasks';
 
 const Bubble = ({date, hour, slot, quarter}) => {
   const dispatch = useDispatch();
