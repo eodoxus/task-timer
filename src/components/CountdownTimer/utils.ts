@@ -31,22 +31,3 @@ export const timeStyle: React.CSSProperties = {
   width: '100%',
   height: '100%',
 };
-
-export const getIsColorBetweenColors = (color, start, end) => {
-  const getIsInRange = (x: number, min: number, max: number) =>
-    (x - min) * (x - max) <= 0;
-
-  const getRGB = (color): number[] =>
-    color
-      .match(/(\d+),(\d+),(\d+)/)!
-      .splice(1, 4)
-      .map((c: string) => parseInt(c, 10));
-
-  const colorRGB = getRGB(color);
-  const startRGB = getRGB(start);
-  const endRGB = getRGB(end);
-
-  return colorRGB.every((c, index) =>
-    getIsInRange(c, startRGB[index], endRGB[index]),
-  );
-};

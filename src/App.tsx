@@ -12,7 +12,7 @@ import {
   retrieveTasks,
 } from './store/storage';
 import {setMuteState} from './store/countdown';
-import {releaseSound} from './store/sound';
+import {releaseSound} from './utils/sound';
 
 // Initialize theme
 Colors.loadColors({

@@ -6,7 +6,7 @@ import {RootState} from '.';
 import {pad} from '../utils/string';
 import {storeMuteState} from './storage';
 import {MINUTE} from '../utils/time';
-import {startSound, stopSound} from './sound';
+import {startSound, stopSound} from '../utils/sound';
 
 const TASK_INTERVAL_LENGTH = 15;
 
