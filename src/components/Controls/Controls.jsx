@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, StyleSheet, View} from 'react-native';
+import {TouchableOpacity, StyleSheet, View, SafeAreaView} from 'react-native';
 
 import {Colors} from 'react-native-ui-lib';
 import {Home, Left, Right} from './Buttons';
@@ -11,7 +11,7 @@ export const Controls = ({
   isHomeEnabled,
 }) => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.button}>
         <TouchableOpacity onPress={onLeftPress} hitSlop={30}>
           <Left />
@@ -29,7 +29,7 @@ export const Controls = ({
           <Right />
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

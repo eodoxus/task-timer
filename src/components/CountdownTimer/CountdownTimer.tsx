@@ -89,10 +89,11 @@ export const CountdownTimer: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderColor: Colors.$outlineDefault,
     position: 'relative',
     width: '100%',
+    borderBottom: 2,
+    height: 150,
+    marginBottom: 20,
   },
   remainingTime: {
     color: Colors.timer,

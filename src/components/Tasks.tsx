@@ -1,11 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, Text} from 'react-native';
 import {Colors, View} from 'react-native-ui-lib';
 
 import {Task} from './Task';
@@ -20,6 +14,7 @@ import {upsertTask, useTasks} from '../store/tasks';
 import {formatDate, formatHourWindow, nextDate, prevDate} from '../utils/time';
 import {Controls} from './Controls';
 import {useDispatch} from 'react-redux';
+import {COUNTDOWN_HEIGHT} from '../utils/constants';
 
 const NUM_TASK_SLOTS = 18;
 const PAGINATION_HOUR_OFFSETS = [-1, 0, 1];
@@ -101,7 +96,7 @@ export const Tasks: React.FC = () => {
   }, [dispatch, tasks, visibleDate]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.dateTimeContainer}>
         <Text style={styles.date}>{formatDate(visibleDate)}</Text>
         <Text style={styles.hourWindow}>{formatHourWindow(visibleHour)}</Text>
@@ -143,15 +138,16 @@ export const Tasks: React.FC = () => {
           }
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    height: Dimensions.get('window').height - 200,
+    height: Dimensions.get('window').height - COUNTDOWN_HEIGHT,
   },
   dateTimeContainer: {
+    display: 'none',
     top: -25,
     width: '100%',
   },
@@ -170,8 +166,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   viewport: {
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
+    borderTopWidth: 2,
     borderColor: Colors.$outlineDefault,
     backgroundColor: Colors.$backgroundNeutralLight,
     width: '100%',
@@ -180,14 +175,15 @@ const styles = StyleSheet.create({
   },
   tasks: {
     width: VIEWPORT_WIDTH,
-    paddingBottom: 80,
+    paddingBottom: 0,
   },
   controls: {
-    paddingTop: 20,
-    paddingBottom: 30,
+    borderTopWidth: 2,
+    borderColor: Colors.$outlineDefault,
     position: 'absolute',
-    bottom: 35,
+    bottom: 0,
     width: '100%',
+    paddingTop: 10,
     backgroundColor: Colors.$backgroundNeutral,
   },
 });
