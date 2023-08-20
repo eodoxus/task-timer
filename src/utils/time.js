@@ -1,6 +1,7 @@
 import {add, format, parse, sub} from 'date-fns';
 
 export const DATE_FORMAT = 'yyyy-MM-dd';
+export const HOUR = 60;
 export const MINUTE = 60;
 export const SECOND = 1000;
 

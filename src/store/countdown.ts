@@ -7,8 +7,7 @@ import {pad} from '../utils/string';
 import {storeMuteState} from './storage';
 import {MINUTE} from '../utils/time';
 import {startSound, stopSound} from '../utils/sound';
-
-const TASK_INTERVAL_LENGTH = 15;
+import { TASK_INTERVAL_LENGTH } from '../utils/constants';
 
 export enum MuteState {
   Sound,

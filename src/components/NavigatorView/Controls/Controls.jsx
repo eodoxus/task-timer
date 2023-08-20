@@ -8,6 +8,7 @@ export const Controls = ({
   onLeftPress,
   onRightPress,
   onHomePress,
+  onHomeLongPress,
   isHomeEnabled,
 }) => {
   return (
@@ -20,6 +21,7 @@ export const Controls = ({
       <View style={styles.button}>
         <TouchableOpacity
           onPress={isHomeEnabled ? onHomePress : () => true}
+          onLongPress={onHomeLongPress}
           hitSlop={30}>
           <Home color={isHomeEnabled ? Colors.button : Colors.disabledButton} />
         </TouchableOpacity>

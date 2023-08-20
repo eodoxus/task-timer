@@ -6,8 +6,13 @@ import {
   makeFindBubble as findBubble,
   makeFindTask as findTask,
   generateId,
+  makeGetBubblesForDate,
+  makeGetTasksForDate,
 } from '../utils/tasks';
 import {storeBubbles, storeTasks} from './storage';
+import {TASK_INTERVAL_LENGTH} from '../utils/constants';
+import {Task} from '../components/NavigatorView/Tasks/Task';
+import Bubble from '../components/NavigatorView/Tasks/Task/Bubble';
 
 export interface Bubble {
   id: number;
@@ -105,6 +110,22 @@ export const useTasks = () => useSelector(selectTasks);
 export const useTask = (date: string, slot: number) => {
   const tasks = useTasks();
   return tasks.find(t => t.date === date && t.slot === slot);
+};
+
+export const useTaskSummariesForDay = (date: string) => {
+  const tasks = makeGetTasksForDate(useTasks())(date);
+  const bubbles = makeGetBubblesForDate(useBubbles())(date);
+  return tasks
+    .map((t: Task) => ({
+      title: t.title,
+      minutes:
+        bubbles.filter((b: Bubble) => b.slot === t.slot).length *
+        TASK_INTERVAL_LENGTH,
+    }))
+    .filter(s => !!s.title && s.minutes)
+    .sort((a, b) =>
+      a.minutes > b.minutes ? -1 : a.minutes < b.minutes ? 1 : 0,
+    );
 };
 
 export const reducer = slice.reducer;

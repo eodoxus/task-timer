@@ -30,6 +30,5 @@ export const Tasks = ({date, hour, tasks}) => {
 const styles = StyleSheet.create({
   tasks: {
     width: Dimensions.get('window').width,
-    paddingBottom: 0,
   },
 });

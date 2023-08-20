@@ -11,6 +11,9 @@ export const makeFindBubble =
         b.quarter === quarter,
     );
 
+export const makeGetBubblesForDate = bubbles => date =>
+  bubbles.filter(b => b.date === date);
+
 export const makeFindTask =
   tasks =>
   ({date, slot}) =>
@@ -50,7 +53,8 @@ const getTaskDates = tasks =>
     ),
   );
 
-export const makeGetTasksForDate = tasks => date => tasks.filter(t => t.date === date);
+export const makeGetTasksForDate = tasks => date =>
+  tasks.filter(t => t.date === date);
 
 export const createTasksForDateIfNoneExist = ({date, tasks}) => {
   const getTasksForDate = makeGetTasksForDate(tasks);

@@ -1,5 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Dimensions, ScrollView, StyleSheet, Text} from 'react-native';
+import {
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import {Colors, View} from 'react-native-ui-lib';
 import {useDispatch} from 'react-redux';
 
@@ -15,14 +21,17 @@ import {
   nextDate,
   prevDate,
 } from '../../utils/time';
-import {Controls} from './Controls';
+import {Close, Controls} from './Controls';
 import {COUNTDOWN_HEIGHT} from '../../utils/constants';
 import {Tasks} from './Tasks/Tasks';
 import {upsertTask, useTasks} from '../../store/tasks';
+import {RollupView} from './RollupViews';
 
 const VIEWPORT_WIDTH = Dimensions.get('window').width;
+const VIEW_MODE_BUBBLES = 0;
+const VIEW_MODE_ROLLUPS = 1;
 
-export const NavigatorView: React.FC = () => {
+export const NavigatorView = () => {
   const dispatch = useDispatch();
   const horizontalScrollViewRef = useRef(null);
   const currentDate = useDate();
@@ -31,19 +40,33 @@ export const NavigatorView: React.FC = () => {
   const isNavEnabledRef = useRef(true);
   const [visibleDate, setVisibleDate] = useState(currentDate);
   const [visibleHour, setVisibleHour] = useState(currentHour);
+  const [viewMode, setViewMode] = useState(VIEW_MODE_BUBBLES);
+
+  const openRollups = () => setViewMode(VIEW_MODE_ROLLUPS);
+  const closeRollups = () => setViewMode(VIEW_MODE_BUBBLES);
 
   const prevHour = () => visibleHour - 1;
   const nextHour = () => visibleHour + 1;
 
   const handleScrollEnd = event => {
-    const isRightSwipe = event.nativeEvent.contentOffset.x < VIEWPORT_WIDTH;
+    const isScrollRight = event.nativeEvent.contentOffset.x < VIEWPORT_WIDTH;
     if (isNavEnabledRef.current) {
-      navigateTo(isRightSwipe ? prevHour() : nextHour());
+      switch (viewMode) {
+        case VIEW_MODE_BUBBLES:
+          navigateTo(isScrollRight ? prevHour() : nextHour());
+          break;
+        case VIEW_MODE_ROLLUPS:
+          setVisibleDate(
+            isScrollRight ? prevDate(visibleDate) : nextDate(visibleDate),
+          );
+          scrollTo(VIEWPORT_WIDTH, false);
+          break;
+      }
     }
     isNavEnabledRef.current = true;
   };
 
-  const navigateTo = (hour: number) => {
+  const navigateTo = hour => {
     if (hour < 0) {
       hour = 23;
       setVisibleDate(prevDate(visibleDate));
@@ -56,16 +79,16 @@ export const NavigatorView: React.FC = () => {
     scrollTo(VIEWPORT_WIDTH, false);
   };
 
-  const scrollTo = (offset: number, animated = true) => {
+  const scrollTo = (offset, animated = true) => {
     horizontalScrollViewRef.current?.scrollTo({x: offset, y: 0, animated});
     horizontalScrollViewRef.current?._children?.[0]?._children?.forEach(c =>
       c.scrollTo({x: 0, y: 0, animated: false}),
     );
   };
-  const scrollToPrevHour = () => scrollTo(0);
-  const scrollToNextHour = () => scrollTo(VIEWPORT_WIDTH * 2);
+  const navToPrev = () => scrollTo(0);
+  const navToNext = () => scrollTo(VIEWPORT_WIDTH * 2);
 
-  const scrollToCurrentHour = () => {
+  const navToCurrent = () => {
     isNavEnabledRef.current = false;
     if (
       getCurrentHourDirection({
@@ -75,9 +98,9 @@ export const NavigatorView: React.FC = () => {
         currentHour,
       }) === 'next'
     ) {
-      scrollToNextHour();
+      navToNext();
     } else {
-      scrollToPrevHour();
+      navToPrev();
     }
 
     setTimeout(() => {
@@ -106,6 +129,13 @@ export const NavigatorView: React.FC = () => {
       </View>
 
       <View style={styles.viewport}>
+        {viewMode === VIEW_MODE_ROLLUPS && (
+          <View style={styles.close}>
+            <TouchableOpacity onPress={closeRollups} hitSlop={40}>
+              <Close />
+            </TouchableOpacity>
+          </View>
+        )}
         <ScrollView
           ref={horizontalScrollViewRef}
           horizontal={true}
@@ -113,19 +143,25 @@ export const NavigatorView: React.FC = () => {
           onMomentumScrollEnd={handleScrollEnd}
           keyboardDismissMode="on-drag"
           contentOffset={{x: VIEWPORT_WIDTH, y: 0}}>
-          <Tasks
-            date={visibleDate}
-            hour={visibleHour}
-            tasks={getTasksForDate(visibleDate)}
-          />
+          {viewMode === VIEW_MODE_BUBBLES && (
+            <Tasks
+              date={visibleDate}
+              hour={visibleHour}
+              tasks={getTasksForDate(visibleDate)}
+            />
+          )}
+          {viewMode === VIEW_MODE_ROLLUPS && (
+            <RollupView date={visibleDate} onClose={closeRollups} />
+          )}
         </ScrollView>
       </View>
 
       <View style={styles.controls}>
         <Controls
-          onLeftPress={scrollToPrevHour}
-          onRightPress={scrollToNextHour}
-          onHomePress={scrollToCurrentHour}
+          onLeftPress={navToPrev}
+          onRightPress={navToNext}
+          onHomePress={navToCurrent}
+          onHomeLongPress={openRollups}
           isHomeEnabled={
             visibleDate !== currentDate || visibleHour !== currentHour
           }
@@ -165,9 +201,12 @@ const styles = StyleSheet.create({
     height: '100%',
     overflow: 'hidden',
   },
-  tasks: {
-    width: VIEWPORT_WIDTH,
-    paddingBottom: 0,
+  close: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    top: 15,
+    right: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0)',
   },
   controls: {
     borderTopWidth: 2,
