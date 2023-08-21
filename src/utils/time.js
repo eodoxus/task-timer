@@ -19,6 +19,8 @@ export const formatDate = date => {
   return `${month}/${day}/${year}`;
 };
 
+export const formatDayOfWeek = dateStr => format(toDate(dateStr), 'EEEE');
+
 export const nextDate = dateStr =>
   format(add(toDate(dateStr), {days: 1}), DATE_FORMAT);
 

@@ -3,7 +3,7 @@ import {React, StyleSheet, Text, View} from 'react-native';
 import {useTaskSummariesForDay} from '../../../store/tasks';
 import {Colors} from 'react-native-ui-lib';
 import {pad} from '../../../utils/string';
-import {HOUR} from '../../../utils/time';
+import {HOUR, formatDayOfWeek} from '../../../utils/time';
 
 const formatMinutes = totalMinutes => {
   const hours = Math.floor(totalMinutes / HOUR);
@@ -15,7 +15,7 @@ export const DailyRollup = ({date}) => {
   const summaries = useTaskSummariesForDay(date);
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Daily Summary</Text>
+      <Text style={styles.header}>{formatDayOfWeek(date)}</Text>
       {summaries.length === 0 && (
         <View style={styles.emptyDay}>
           <View>

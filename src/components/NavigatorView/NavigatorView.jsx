@@ -44,6 +44,8 @@ export const NavigatorView = () => {
 
   const openRollups = () => setViewMode(VIEW_MODE_ROLLUPS);
   const closeRollups = () => setViewMode(VIEW_MODE_BUBBLES);
+  const toggleRollups = () =>
+    viewMode === VIEW_MODE_BUBBLES ? openRollups() : closeRollups();
 
   const prevHour = () => visibleHour - 1;
   const nextHour = () => visibleHour + 1;
@@ -124,18 +126,13 @@ export const NavigatorView = () => {
   return (
     <View style={styles.container}>
       <View style={styles.dateTimeContainer}>
-        <Text style={styles.date}>{formatDate(visibleDate)}</Text>
+        <TouchableOpacity onPress={openRollups} hitSlop={40}>
+          <Text style={styles.date}>{formatDate(visibleDate)}</Text>
+        </TouchableOpacity>
         <Text style={styles.hourWindow}>{formatHourWindow(visibleHour)}</Text>
       </View>
 
       <View style={styles.viewport}>
-        {viewMode === VIEW_MODE_ROLLUPS && (
-          <View style={styles.close}>
-            <TouchableOpacity onPress={closeRollups} hitSlop={40}>
-              <Close />
-            </TouchableOpacity>
-          </View>
-        )}
         <ScrollView
           ref={horizontalScrollViewRef}
           horizontal={true}
@@ -160,10 +157,14 @@ export const NavigatorView = () => {
         <Controls
           onLeftPress={navToPrev}
           onRightPress={navToNext}
-          onHomePress={navToCurrent}
-          onHomeLongPress={openRollups}
+          onHomePress={
+            viewMode === VIEW_MODE_ROLLUPS ? closeRollups : navToCurrent
+          }
+          onHomeLongPress={toggleRollups}
           isHomeEnabled={
-            visibleDate !== currentDate || visibleHour !== currentHour
+            viewMode === VIEW_MODE_ROLLUPS ||
+            visibleDate !== currentDate ||
+            visibleHour !== currentHour
           }
         />
       </View>
@@ -200,13 +201,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     overflow: 'hidden',
-  },
-  close: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    top: 15,
-    right: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0)',
   },
   controls: {
     borderTopWidth: 2,
