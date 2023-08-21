@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Pressable, StyleSheet} from 'react-native';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Colors, Text, View} from 'react-native-ui-lib';
 import {useDispatch} from 'react-redux';
 
@@ -41,7 +41,7 @@ export const CountdownTimer: React.FC = () => {
   const remainingSeconds = useRemainingSeconds();
   const muteState = useMuteState();
 
-  const handlePress = () => {
+  const handleVolumePress = () => {
     dispatch(stopAlarm());
     dispatch(cycleMuteState());
   };
@@ -54,35 +54,35 @@ export const CountdownTimer: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <Pressable onPress={handlePress}>
-      <View style={styles.container}>
-        <CountdownCircle
-          isPlaying
-          duration={intervalLength * MINUTE}
-          remainingTime={remainingSeconds}
-          colors={Colors.timer}
-          rotation="counterclockwise"
-          strokeLinecap="round"
-          size={150}
-          onComplete={() => {
-            return {shouldRepeat: true};
-          }}>
-          {() => (
-            <>
-              <Text style={styles.remainingTime}>
-                {formatRemainingSeconds(remainingSeconds)}
-              </Text>
-              <Text style={styles.time}>{formatTime(hour, minute)}</Text>
-            </>
-          )}
-        </CountdownCircle>
+    <View style={styles.container}>
+      <CountdownCircle
+        isPlaying
+        duration={intervalLength * MINUTE}
+        remainingTime={remainingSeconds}
+        colors={Colors.timer}
+        rotation="counterclockwise"
+        strokeLinecap="round"
+        size={150}
+        onComplete={() => {
+          return {shouldRepeat: true};
+        }}>
+        {() => (
+          <>
+            <Text style={styles.remainingTime}>
+              {formatRemainingSeconds(remainingSeconds)}
+            </Text>
+            <Text style={styles.time}>{formatTime(hour, minute)}</Text>
+          </>
+        )}
+      </CountdownCircle>
+      <TouchableOpacity onPress={handleVolumePress} hitSlop={40}>
         <View style={styles.volumeContainer}>
           {muteState === MuteState.Sound && <Volume />}
           {muteState === MuteState.Mute && <Muted />}
           {muteState === MuteState.Vibrate && <Vibrate />}
         </View>
-      </View>
-    </Pressable>
+      </TouchableOpacity>
+    </View>
   );
 };
 

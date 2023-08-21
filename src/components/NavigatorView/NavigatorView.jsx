@@ -126,7 +126,7 @@ export const NavigatorView = () => {
   return (
     <View style={styles.container}>
       <View style={styles.dateTimeContainer}>
-        <TouchableOpacity onPress={openRollups} hitSlop={40}>
+        <TouchableOpacity onPress={openRollups} hitSlop={20}>
           <Text style={styles.date}>{formatDate(visibleDate)}</Text>
         </TouchableOpacity>
         <Text style={styles.hourWindow}>{formatHourWindow(visibleHour)}</Text>
