@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderColor: Colors.$outlineDefault,
-    position: 'relative,',
     height: 40,
   },
   titleContainer: {

@@ -1,3 +1,4 @@
+import {Settings} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const retrieveBubbles = async () => {
@@ -40,22 +41,7 @@ export const storeTasks = async tasks => {
   }
 };
 
-export const retrieveMuteState = async () => {
-  try {
-    const value = await AsyncStorage.getItem('MUTE_STATE');
-    if (value !== null) {
-      return JSON.parse(value);
-    }
-  } catch (error) {
-    console.error('Error retrieving mute state from storage', error);
-  }
-  return 0;
-};
+export const retrieveMuteState = async () => Settings.get('MUTE_STATE') || 0;
 
-export const storeMuteState = async muteState => {
-  try {
-    await AsyncStorage.setItem('MUTE_STATE', JSON.stringify(muteState));
-  } catch (error) {
-    console.error('Error storing mute state to storage', error);
-  }
-};
+export const storeMuteState = async muteState =>
+  Settings.set({MUTE_STATE: muteState});

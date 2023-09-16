@@ -3,15 +3,22 @@ import {Pressable, StyleSheet} from 'react-native';
 import {Colors, View} from 'react-native-ui-lib';
 import {useDispatch} from 'react-redux';
 
-import {stopAlarm, useHour, useQuarter} from '../../../../store/countdown';
+import {
+  stopAlarm,
+  useDate,
+  useHour,
+  useQuarter,
+} from '../../../../store/countdown';
 import {createBubble, deleteBubble, useBubble} from '../../../../store/tasks';
 
 const Bubble = ({date, hour, slot, quarter}) => {
   const dispatch = useDispatch();
+  const bubble = useBubble({date, hour, slot, quarter});
+  const currentDate = useDate();
   const currentHour = useHour();
   const currentQuarter = useQuarter();
-  const shouldShowLine = hour === currentHour && quarter === currentQuarter;
-  const bubble = useBubble({date, hour, slot, quarter});
+  const shouldShowLine =
+    date === currentDate && hour === currentHour && quarter === currentQuarter;
 
   const handlePress = useCallback(() => {
     dispatch(stopAlarm());

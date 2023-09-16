@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 20,
-    fontWeight: 900,
     paddingLeft: 10,
   },
   emptyDay: {

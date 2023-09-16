@@ -25,7 +25,6 @@ const onSoundLoaded = err => {
 export const startSound = () => {
   if (!sound) {
     sound = new Sound(asset, onSoundLoaded);
-    return;
   }
 
   sound.play();

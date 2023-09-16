@@ -21,11 +21,12 @@ import {
   nextDate,
   prevDate,
 } from '../../utils/time';
-import {Close, Controls} from './Controls';
+import {Controls} from './Controls';
 import {COUNTDOWN_HEIGHT} from '../../utils/constants';
 import {Tasks} from './Tasks/Tasks';
 import {upsertTask, useTasks} from '../../store/tasks';
 import {RollupView} from './RollupViews';
+import {useAppBackgrounded} from '../../hooks';
 
 const VIEWPORT_WIDTH = Dimensions.get('window').width;
 const VIEW_MODE_BUBBLES = 0;
@@ -49,6 +50,9 @@ export const NavigatorView = () => {
 
   const prevHour = () => visibleHour - 1;
   const nextHour = () => visibleHour + 1;
+
+  const isCurrent = () =>
+    visibleDate === currentDate && visibleHour === currentHour;
 
   const handleScrollEnd = event => {
     const isScrollRight = event.nativeEvent.contentOffset.x < VIEWPORT_WIDTH;
@@ -91,6 +95,10 @@ export const NavigatorView = () => {
   const navToNext = () => scrollTo(VIEWPORT_WIDTH * 2);
 
   const navToCurrent = () => {
+    if (isCurrent()) {
+      return;
+    }
+
     isNavEnabledRef.current = false;
     if (
       getCurrentHourDirection({
@@ -120,6 +128,8 @@ export const NavigatorView = () => {
       dispatch(upsertTask({date: visibleDate, slot: t.slot, title: t.title})),
     );
   }, [dispatch, tasks, visibleDate]);
+
+  useAppBackgrounded(navToCurrent);
 
   const getTasksForDate = makeGetTasksForDate(tasks);
 

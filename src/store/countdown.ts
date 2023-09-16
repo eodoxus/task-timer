@@ -7,7 +7,7 @@ import {pad} from '../utils/string';
 import {storeMuteState} from './storage';
 import {MINUTE} from '../utils/time';
 import {startSound, stopSound} from '../utils/sound';
-import { TASK_INTERVAL_LENGTH } from '../utils/constants';
+import {TASK_INTERVAL_LENGTH} from '../utils/constants';
 
 export enum MuteState {
   Sound,
@@ -90,8 +90,7 @@ export const slice = createSlice({
     },
     startAlarm: state => {
       if (state.muteState === MuteState.Sound) {
-        startSound();
-        state.isChiming = true;
+        return startSoundWithVibrationFallback(state);
       } else if (state.muteState === MuteState.Vibrate) {
         Vibration.vibrate();
         state.isVibrating = true;
@@ -114,8 +113,7 @@ export const slice = createSlice({
       let {isChiming, isVibrating} = state;
       if (state.remainingSeconds === 1) {
         if (state.muteState === MuteState.Sound) {
-          startSound();
-          isChiming = true;
+          return startSoundWithVibrationFallback(state);
         }
         if (state.muteState === MuteState.Vibrate) {
           Vibration.vibrate();
@@ -132,6 +130,19 @@ export const slice = createSlice({
     },
   },
 });
+
+const startSoundWithVibrationFallback = (state: CountdownState) => {
+  const newState = {...state};
+  try {
+    startSound();
+    newState.isChiming = true;
+  } catch (e) {
+    Vibration.vibrate();
+    newState.isVibrating = true;
+    newState.muteState = MuteState.Vibrate;
+  }
+  return newState;
+};
 
 export const {cycleMuteState, setMuteState, startAlarm, stopAlarm, update} =
   slice.actions;
