@@ -1,7 +1,7 @@
 {
-  "name": "task-timer",
+  "name": "bubble-timer",
   "version": "0.0.1",
-  "description": "A fun work timer for mobile devices (react-native)",
+  "description": "A fun task timer for mobile devices (react-native) that tracks time in quarter hour intervals with bubbles.",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
