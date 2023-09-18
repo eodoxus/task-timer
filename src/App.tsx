@@ -13,6 +13,7 @@ import {
 } from './store/storage';
 import {setMuteState} from './store/countdown';
 import {releaseSound} from './utils/sound';
+import {useFillBubbleNotification} from './hooks/use-fill-bubble-notification';
 
 // Initialize theme
 Colors.loadColors({
@@ -25,6 +26,8 @@ Colors.loadColors({
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
+
+  useFillBubbleNotification();
 
   useEffect(() => {
     (async () => {

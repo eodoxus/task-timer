@@ -113,7 +113,7 @@ export const NavigatorView = () => {
       navToPrev();
     }
 
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       setVisibleDate(currentDate);
       navigateTo(currentHour);
     });
