@@ -42,17 +42,17 @@ export const DailyRollup = ({date}) => {
       {summaries.length === 0 && (
         <View style={styles.emptyDay}>
           <View>
-            <Text>{tagLines[tagLine.current]}</Text>
+            <Text style={styles.text}>{tagLines[tagLine.current]}</Text>
           </View>
         </View>
       )}
       {summaries.map((s, idx) => (
         <View style={styles.summary} key={idx}>
           <View style={styles.title}>
-            <Text>{s.title}</Text>
+            <Text style={styles.text}>{s.title}</Text>
           </View>
           <View style={styles.minutes}>
-            <Text>{formatMinutes(s.minutes)}</Text>
+            <Text style={styles.text}>{formatMinutes(s.minutes)}</Text>
           </View>
         </View>
       ))}
@@ -64,25 +64,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 10,
+    color: Colors.textTask,
   },
   header: {
     fontSize: 20,
     paddingLeft: 10,
+    color: Colors.textTask,
   },
   emptyDay: {
     justifyContent: 'center',
     flexDirection: 'row',
     paddingTop: 100,
+    color: Colors.textTask,
   },
   summary: {
     flex: 1,
     borderBottomWidth: 1,
-    borderColor: Colors.$outlineDefault,
+    borderColor: Colors.navigatorBorder,
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 20,
     paddingRight: 10,
     flexDirection: 'row',
+  },
+  text: {
+    color: Colors.textTask,
   },
   title: {
     flex: 4,

@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     top: -10,
   },
   time: {
-    color: Colors.$textNeutralLight,
+    color: Colors.textInfo,
     fontSize: 16,
     position: 'relative',
     top: -4,

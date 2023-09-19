@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     padding: 5,
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderColor: Colors.$outlineDefault,
+    borderColor: Colors.navigatorBorder,
     height: 40,
   },
   titleContainer: {
@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     flex: 1,
+    color: Colors.textTask,
   },
   bubbles: {
     flexDirection: 'row',

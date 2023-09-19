@@ -1,48 +1,56 @@
-import React, {useEffect} from 'react';
-import {StyleSheet} from 'react-native';
+import React, {useRef} from 'react';
+import {Appearance, StyleSheet, useColorScheme} from 'react-native';
 import {Colors, View} from 'react-native-ui-lib';
-import {useDispatch} from 'react-redux';
+
+import {useData, useFillBubbleNotification} from './hooks';
 
 import {CountdownTimer} from './components';
 import {NavigatorView} from './components';
-import {setBubbles, setTasks} from './store/tasks';
-import {
-  retrieveBubbles,
-  retrieveMuteState,
-  retrieveTasks,
-} from './store/storage';
-import {setMuteState} from './store/countdown';
-import {releaseSound} from './utils/sound';
-import {useFillBubbleNotification} from './hooks/use-fill-bubble-notification';
+
+const defaultScheme = 'light';
+
+const schemes = {
+  dark: {
+    background: '#000',
+    bubbleEmpty: '#121212',
+    bubbleFilled: '#0052cc',
+    bubbleOutline: '#333',
+    button: '#666',
+    disabledButton: '#333',
+    navigatorBackground: '#111',
+    navigatorBorder: '#222',
+    textInfo: Colors.$textNeutralLight,
+    textTask: '#aaa',
+    timer: '#2584ff',
+  },
+  light: {
+    background: Colors.$backgroundNeutral,
+    bubbleEmpty: Colors.$backgroundNeutral,
+    bubbleFilled: '#0052cc',
+    bubbleOutline: Colors.$outlineDisabled,
+    button: '#d9d9d9',
+    disabledButton: '#eaebee',
+    navigatorBackground: Colors.$backgroundNeutralLight,
+    navigatorBorder: Colors.$outlineDefault,
+    textInfo: Colors.$textNeutralLight,
+    textTask: Colors.$textDefault,
+    timer: '#2584ff',
+  },
+};
 
 // Initialize theme
-Colors.loadColors({
-  timer: '#2584ff',
-  filledBubble: '#0052cc',
-  quarterLine: '#0052cc',
-  button: '#d9d9d9',
-  disabledButton: '#eaebee',
-});
+Colors.loadColors(schemes[Appearance.getColorScheme() || defaultScheme]);
 
 const App: React.FC = () => {
-  const dispatch = useDispatch();
+  const scheme = useColorScheme();
+  const schemeRef = useRef(scheme);
+  if (schemeRef.current !== scheme) {
+    schemeRef.current = scheme;
+    Colors.loadColors(schemes[scheme || defaultScheme]);
+  }
 
+  useData();
   useFillBubbleNotification();
-
-  useEffect(() => {
-    (async () => {
-      const bubbles = await retrieveBubbles();
-      const tasks = await retrieveTasks();
-      const muteState = await retrieveMuteState();
-      dispatch(setBubbles(bubbles));
-      dispatch(setTasks(tasks));
-      dispatch(setMuteState(muteState));
-    })();
-
-    return () => {
-      releaseSound();
-    };
-  }, [dispatch]);
 
   return (
     <View style={styles.container}>
@@ -55,7 +63,7 @@ const App: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: Colors.$backgroundNeutral,
+    backgroundColor: Colors.background,
     paddingTop: 60,
   },
 });

@@ -57,8 +57,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: '100%',
     height: 30,
-    borderColor: Colors.$outlineDisabled,
-    backgroundColor: Colors.$backgroundNeutral,
+    borderColor: Colors.bubbleOutline,
+    backgroundColor: Colors.bubbleEmpty,
   },
   pressed: {
     width: '100%',
@@ -67,8 +67,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, .1)',
   },
   filled: {
-    backgroundColor: Colors.filledBubble,
-    borderColor: Colors.filledBubble,
+    backgroundColor: Colors.bubbleFilled,
+    borderColor: Colors.bubbleFilled,
   },
   line: {
     width: 2,
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -5,
     left: 15,
-    backgroundColor: Colors.quarterLine,
+    backgroundColor: Colors.bubbleFilled,
     zIndex: 1,
   },
 });

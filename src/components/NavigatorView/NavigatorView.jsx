@@ -28,7 +28,7 @@ import {upsertTask, useTasks} from '../../store/tasks';
 import {RollupView} from './RollupViews';
 import {useAppBackgrounded} from '../../hooks';
 
-const VIEWPORT_WIDTH = Dimensions.get('window').width;
+const VIEWPORT_WIDTH = Dimensions.get('window').width - 2;
 const VIEW_MODE_BUBBLES = 0;
 const VIEW_MODE_ROLLUPS = 1;
 
@@ -191,13 +191,13 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   date: {
-    color: Colors.$textNeutralLight,
+    color: Colors.textInfo,
     fontSize: 16,
     position: 'absolute',
     left: 5,
   },
   hourWindow: {
-    color: Colors.$textNeutralLight,
+    color: Colors.textInfo,
     fontSize: 16,
     position: 'absolute',
     right: 5,
@@ -206,19 +206,21 @@ const styles = StyleSheet.create({
   },
   viewport: {
     borderTopWidth: 2,
-    borderColor: Colors.$outlineDefault,
-    backgroundColor: Colors.$backgroundNeutralLight,
+    borderColor: Colors.navigatorBorder,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    backgroundColor: Colors.navigatorBackground,
     width: '100%',
     height: '100%',
     overflow: 'hidden',
   },
   controls: {
     borderTopWidth: 2,
-    borderColor: Colors.$outlineDefault,
+    borderColor: Colors.navigatorBorder,
     position: 'absolute',
     bottom: 0,
     width: '100%',
     paddingTop: 10,
-    backgroundColor: Colors.$backgroundNeutral,
+    backgroundColor: Colors.background,
   },
 });
