@@ -10,6 +10,7 @@ import {
   useQuarter,
 } from '../../../../store/countdown';
 import {createBubble, deleteBubble, useBubble} from '../../../../store/tasks';
+import {requestPermission as requestNotificationsPermission} from '../../../../lib/notifications';
 
 const Bubble = ({date, hour, slot, quarter}) => {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ const Bubble = ({date, hour, slot, quarter}) => {
     date === currentDate && hour === currentHour && quarter === currentQuarter;
 
   const handlePress = useCallback(() => {
+    requestNotificationsPermission();
     dispatch(stopAlarm());
     dispatch(
       bubble ? deleteBubble(bubble) : createBubble({date, hour, slot, quarter}),

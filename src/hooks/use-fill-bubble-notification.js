@@ -1,17 +1,9 @@
-import {NativeModules} from 'react-native';
-
 import {useAppBackgrounded} from './';
 import {useRemainingSeconds} from '../store/countdown';
-
-const {Notifications} = NativeModules;
+import {fillBubbleIn as fillBubbleInNotification} from '../lib/notifications';
 
 export const useFillBubbleNotification = () => {
   const remainingSeconds = useRemainingSeconds();
 
-  useAppBackgrounded(() =>
-    Notifications.scheduleNotification(
-      'Fill in your bubble!',
-      remainingSeconds,
-    ),
-  );
+  useAppBackgrounded(() => fillBubbleInNotification(remainingSeconds));
 };

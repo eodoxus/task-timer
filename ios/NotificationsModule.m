@@ -5,6 +5,25 @@
 
 RCT_EXPORT_MODULE(Notifications);
 
+RCT_EXPORT_METHOD(requestPermission)
+{
+  RCTLogInfo(@"Requesting notification permission");
+  
+  // Get the notification center and add the request
+  UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+  [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert |
+                                           UNAuthorizationOptionSound)
+                        completionHandler:^(BOOL granted, NSError * _Nullable error) {
+    if (granted) {
+      RCTLogInfo(@"Notification authorization granted.");
+    } else {
+      RCTLogInfo(@"Notification authorization denied.");
+    }
+  }];
+  
+  RCTLogInfo(@"Finished requesting notification permission");
+}
+
 RCT_EXPORT_METHOD(scheduleNotification:(NSString *)message secondsFromNow:(NSInteger)secondsFromNow)
 {
   RCTLogInfo(@"Scheduling notification '%@' in %ld sec", message, (long)secondsFromNow);
@@ -12,12 +31,10 @@ RCT_EXPORT_METHOD(scheduleNotification:(NSString *)message secondsFromNow:(NSInt
   // Get the notification center and add the request
   UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
   [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert |
-                                           UNAuthorizationOptionBadge |
-                                           UNAuthorizationOptionSound |
-                                           UNAuthorizationOptionProvisional)
+                                           UNAuthorizationOptionSound)
                         completionHandler:^(BOOL granted, NSError * _Nullable error) {
     if (granted) {
-      RCTLogInfo(@"Provisional authorization granted.");
+      RCTLogInfo(@"Notification authorization granted.");
       
       // Create notification content
       UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
@@ -36,13 +53,13 @@ RCT_EXPORT_METHOD(scheduleNotification:(NSString *)message secondsFromNow:(NSInt
       // Add the request
       [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
         if (error) {
-          RCTLogInfo(@"Error sending provisional notification: %@", error);
+          RCTLogInfo(@"Error requesting notification: %@", error);
         } else {
-          RCTLogInfo(@"Provisional notification sent successfully.");
+          RCTLogInfo(@"Notification requested successfully.");
         }
       }];
     } else {
-      RCTLogInfo(@"Provisional authorization denied.");
+      RCTLogInfo(@"Notification authorization denied.");
     }
   }];
   
