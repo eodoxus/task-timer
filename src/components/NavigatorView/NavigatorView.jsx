@@ -129,7 +129,10 @@ export const NavigatorView = () => {
     );
   }, [dispatch, tasks, visibleDate]);
 
-  useAppBackgrounded(navToCurrent);
+  useAppBackgrounded(() => {
+    navToCurrent();
+    closeRollups();
+  });
 
   const getTasksForDate = makeGetTasksForDate(tasks);
 
