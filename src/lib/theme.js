@@ -7,15 +7,15 @@ export const DEFAULT_SCHEME = 'light';
 export const schemes = {
   dark: {
     background: '#000',
-    bubbleEmpty: '#121212',
+    bubbleEmpty: '#222',
     bubbleFilled: '#0052cc',
-    bubbleOutline: '#333',
+    bubbleOutline: '#444',
     button: '#666',
     disabledButton: '#333',
     navigatorBackground: '#111',
-    navigatorBorder: '#222',
+    navigatorBorder: '#444',
     textInfo: Colors.$textNeutralLight,
-    textTask: '#aaa',
+    textTask: '#eee',
     timer: '#2584ff',
   },
   light: {

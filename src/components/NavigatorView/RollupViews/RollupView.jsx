@@ -4,6 +4,7 @@ import {DailyRollup} from './DailyRollup';
 import {nextDate, prevDate} from '../../../utils/time';
 
 export const RollupView = ({date}) => {
+  const styles = createStyles();
   return [prevDate(date), date, nextDate(date)].map(d => (
     <ScrollView key={d}>
       <View style={styles.rollups}>
@@ -13,8 +14,9 @@ export const RollupView = ({date}) => {
   ));
 };
 
-const styles = StyleSheet.create({
-  rollups: {
-    width: Dimensions.get('window').width,
-  },
-});
+const createStyles = () =>
+  StyleSheet.create({
+    rollups: {
+      width: Dimensions.get('window').width,
+    },
+  });

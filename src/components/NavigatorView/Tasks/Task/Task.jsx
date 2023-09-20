@@ -16,6 +16,7 @@ export const Task = ({title, date, hour, slot}) => {
     [date, dispatch, slot],
   );
 
+  const styles = createStyles();
   return (
     <View style={styles.container}>
       <TextInput
@@ -40,28 +41,30 @@ export const Task = ({title, date, hour, slot}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: Colors.navigatorBorder,
-    height: 40,
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    flex: 1,
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 16,
-    flex: 1,
-    color: Colors.textTask,
-  },
-  bubbles: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    flex: 1,
-    display: 'flex',
-  },
-});
+const createStyles = () =>
+  StyleSheet.create({
+    container: {
+      padding: 5,
+      flexDirection: 'row',
+      borderBottomWidth: 1,
+      borderColor: Colors.navigatorBorder,
+      height: 40,
+    },
+    titleContainer: {
+      flexDirection: 'row',
+      flex: 1,
+      alignItems: 'center',
+    },
+    title: {
+      fontSize: 16,
+      flex: 1,
+      color: Colors.textTask,
+    },
+    bubbles: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      flex: 1,
+      display: 'flex',
+      paddingRight: 5,
+    },
+  });

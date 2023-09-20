@@ -10,6 +10,7 @@ const PAGINATION_HOUR_OFFSETS = [-1, 0, 1];
 export const Tasks = ({date, hour, tasks}) => {
   const findTask = makeFindTask(tasks);
 
+  const styles = createStyles();
   return PAGINATION_HOUR_OFFSETS.map(hourOffset => (
     <ScrollView key={hour + hourOffset}>
       <View style={styles.tasks}>
@@ -27,8 +28,9 @@ export const Tasks = ({date, hour, tasks}) => {
   ));
 };
 
-const styles = StyleSheet.create({
-  tasks: {
-    width: Dimensions.get('window').width,
-  },
-});
+const createStyles = () =>
+  StyleSheet.create({
+    tasks: {
+      width: Dimensions.get('window').width,
+    },
+  });

@@ -34,11 +34,11 @@ const VIEW_MODE_ROLLUPS = 1;
 
 export const NavigatorView = () => {
   const dispatch = useDispatch();
-  const horizontalScrollViewRef = useRef(null);
   const currentDate = useDate();
   const currentHour = useHour();
-  const tasks = useTasks();
+  const horizontalScrollViewRef = useRef(null);
   const isNavEnabledRef = useRef(true);
+  const tasks = useTasks();
   const [visibleDate, setVisibleDate] = useState(currentDate);
   const [visibleHour, setVisibleHour] = useState(currentHour);
   const [viewMode, setViewMode] = useState(VIEW_MODE_BUBBLES);
@@ -136,6 +136,7 @@ export const NavigatorView = () => {
 
   const getTasksForDate = makeGetTasksForDate(tasks);
 
+  const styles = createStyles();
   return (
     <View style={styles.container}>
       <View style={styles.dateTimeContainer}>
@@ -185,45 +186,46 @@ export const NavigatorView = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    height: Dimensions.get('window').height - COUNTDOWN_HEIGHT,
-  },
-  dateTimeContainer: {
-    top: -25,
-    width: '100%',
-  },
-  date: {
-    color: Colors.textInfo,
-    fontSize: 16,
-    position: 'absolute',
-    left: 5,
-  },
-  hourWindow: {
-    color: Colors.textInfo,
-    fontSize: 16,
-    position: 'absolute',
-    right: 5,
-    width: 120,
-    textAlign: 'right',
-  },
-  viewport: {
-    borderTopWidth: 2,
-    borderColor: Colors.navigatorBorder,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    backgroundColor: Colors.navigatorBackground,
-    width: '100%',
-    height: '100%',
-    overflow: 'hidden',
-  },
-  controls: {
-    borderTopWidth: 2,
-    borderColor: Colors.navigatorBorder,
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    paddingTop: 10,
-    backgroundColor: Colors.background,
-  },
-});
+const createStyles = () =>
+  StyleSheet.create({
+    container: {
+      height: Dimensions.get('window').height - COUNTDOWN_HEIGHT,
+    },
+    dateTimeContainer: {
+      top: -25,
+      width: '100%',
+    },
+    date: {
+      color: Colors.textInfo,
+      fontSize: 16,
+      position: 'absolute',
+      left: 5,
+    },
+    hourWindow: {
+      color: Colors.textInfo,
+      fontSize: 16,
+      position: 'absolute',
+      right: 5,
+      width: 120,
+      textAlign: 'right',
+    },
+    viewport: {
+      borderTopWidth: 2,
+      borderColor: Colors.navigatorBorder,
+      borderLeftWidth: 1,
+      borderRightWidth: 1,
+      backgroundColor: Colors.navigatorBackground,
+      width: '100%',
+      height: '100%',
+      overflow: 'hidden',
+    },
+    controls: {
+      borderTopWidth: 2,
+      borderColor: Colors.navigatorBorder,
+      position: 'absolute',
+      bottom: 0,
+      width: '100%',
+      paddingTop: 10,
+      backgroundColor: Colors.background,
+    },
+  });

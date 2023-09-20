@@ -16,6 +16,7 @@ const App: React.FC = () => {
   useFillBubbleNotification();
   useTheme();
 
+  const styles = createStyles();
   return (
     <View style={styles.container}>
       <CountdownTimer />
@@ -24,12 +25,13 @@ const App: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: Colors.background,
-    paddingTop: 60,
-  },
-});
+const createStyles = () =>
+  StyleSheet.create({
+    container: {
+      ...StyleSheet.absoluteFillObject,
+      backgroundColor: Colors.background,
+      paddingTop: 60,
+    },
+  });
 
 export default App;

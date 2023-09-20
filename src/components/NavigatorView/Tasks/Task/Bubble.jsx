@@ -29,10 +29,12 @@ const Bubble = ({date, hour, slot, quarter}) => {
     );
   }, [bubble, date, dispatch, hour, quarter, slot]);
 
+  const styles = createStyles();
   const ovalStyles = [styles.oval];
   if (bubble) {
     ovalStyles.push(styles.filled);
   }
+
   return (
     <View style={styles.container}>
       <Pressable onPress={() => handlePress()} hitSlop={10}>
@@ -49,38 +51,39 @@ const Bubble = ({date, hour, slot, quarter}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    width: 30,
-    marginLeft: 5,
-  },
-  oval: {
-    borderRadius: 20,
-    borderWidth: 1,
-    width: '100%',
-    height: 30,
-    borderColor: Colors.bubbleOutline,
-    backgroundColor: Colors.bubbleEmpty,
-  },
-  pressed: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 20,
-    backgroundColor: 'rgba(0, 0, 0, .1)',
-  },
-  filled: {
-    backgroundColor: Colors.bubbleFilled,
-    borderColor: Colors.bubbleFilled,
-  },
-  line: {
-    width: 2,
-    height: 41,
-    position: 'absolute',
-    top: -5,
-    left: 15,
-    backgroundColor: Colors.bubbleFilled,
-    zIndex: 1,
-  },
-});
+const createStyles = () =>
+  StyleSheet.create({
+    container: {
+      width: 30,
+      marginLeft: 5,
+    },
+    oval: {
+      borderRadius: 20,
+      borderWidth: 1,
+      width: '100%',
+      height: 30,
+      borderColor: Colors.bubbleOutline,
+      backgroundColor: Colors.bubbleEmpty,
+    },
+    pressed: {
+      width: '100%',
+      height: '100%',
+      borderRadius: 20,
+      backgroundColor: 'rgba(0, 0, 0, .1)',
+    },
+    filled: {
+      backgroundColor: Colors.bubbleFilled,
+      borderColor: Colors.bubbleFilled,
+    },
+    line: {
+      width: 2,
+      height: 41,
+      position: 'absolute',
+      top: -5,
+      left: 15,
+      backgroundColor: Colors.bubbleFilled,
+      zIndex: 1,
+    },
+  });
 
 export default Bubble;

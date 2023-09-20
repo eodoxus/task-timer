@@ -53,6 +53,7 @@ export const CountdownTimer: React.FC = () => {
     };
   }, [dispatch]);
 
+  const styles = createStyles();
   return (
     <View style={styles.container}>
       <CountdownCircle
@@ -86,34 +87,35 @@ export const CountdownTimer: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    position: 'relative',
-    width: '100%',
-    borderBottom: 2,
-    height: 150,
-    marginBottom: 20,
-  },
-  remainingTime: {
-    color: Colors.timer,
-    fontSize: 25,
-    fontWeight: '600',
-    top: -10,
-  },
-  time: {
-    color: Colors.textInfo,
-    fontSize: 16,
-    position: 'relative',
-    top: -4,
-  },
-  volumeContainer: {
-    position: 'relative',
-    width: 25,
-    top: -45,
-    left: 0,
-  },
-  volumeImage: {
-    width: 25,
-  },
-});
+const createStyles = () =>
+  StyleSheet.create({
+    container: {
+      alignItems: 'center',
+      position: 'relative',
+      width: '100%',
+      borderBottom: 2,
+      height: 150,
+      marginBottom: 20,
+    },
+    remainingTime: {
+      color: Colors.timer,
+      fontSize: 25,
+      fontWeight: '600',
+      top: -10,
+    },
+    time: {
+      color: Colors.textInfo,
+      fontSize: 16,
+      position: 'relative',
+      top: -4,
+    },
+    volumeContainer: {
+      position: 'relative',
+      width: 25,
+      top: -45,
+      left: 0,
+    },
+    volumeImage: {
+      width: 25,
+    },
+  });

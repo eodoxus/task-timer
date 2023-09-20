@@ -36,6 +36,8 @@ export const DailyRollup = ({date}) => {
   const summaries = useTaskSummariesForDay(date);
   const tagLines = date <= currentDate ? EMPTY_TAGLINES : FUTURE_TAGLINES;
   const tagLine = useRef(Math.floor(Math.random() * tagLines.length));
+
+  const styles = createStyles();
   return (
     <View style={styles.container}>
       <Text style={styles.header}>{formatDayOfWeek(date)}</Text>
@@ -60,41 +62,42 @@ export const DailyRollup = ({date}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 10,
-    color: Colors.textTask,
-  },
-  header: {
-    fontSize: 20,
-    paddingLeft: 10,
-    color: Colors.textTask,
-  },
-  emptyDay: {
-    justifyContent: 'center',
-    flexDirection: 'row',
-    paddingTop: 100,
-    color: Colors.textTask,
-  },
-  summary: {
-    flex: 1,
-    borderBottomWidth: 1,
-    borderColor: Colors.navigatorBorder,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 20,
-    paddingRight: 10,
-    flexDirection: 'row',
-  },
-  text: {
-    color: Colors.textTask,
-  },
-  title: {
-    flex: 4,
-  },
-  minutes: {
-    alignItems: 'flex-end',
-    flex: 1,
-  },
-});
+const createStyles = () =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      paddingTop: 10,
+      color: Colors.textTask,
+    },
+    header: {
+      fontSize: 20,
+      paddingLeft: 10,
+      color: Colors.textTask,
+    },
+    emptyDay: {
+      justifyContent: 'center',
+      flexDirection: 'row',
+      paddingTop: 100,
+      color: Colors.textTask,
+    },
+    summary: {
+      flex: 1,
+      borderBottomWidth: 1,
+      borderColor: Colors.navigatorBorder,
+      paddingTop: 10,
+      paddingBottom: 10,
+      paddingLeft: 20,
+      paddingRight: 10,
+      flexDirection: 'row',
+    },
+    text: {
+      color: Colors.textTask,
+    },
+    title: {
+      flex: 4,
+    },
+    minutes: {
+      alignItems: 'flex-end',
+      flex: 1,
+    },
+  });

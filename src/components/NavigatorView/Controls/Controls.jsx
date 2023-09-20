@@ -11,6 +11,7 @@ export const Controls = ({
   onHomeLongPress,
   isHomeEnabled,
 }) => {
+  const styles = createStyles();
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.button}>
@@ -35,13 +36,14 @@ export const Controls = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    width: '100%',
-  },
-  button: {
-    flex: 1,
-    alignItems: 'center',
-  },
-});
+const createStyles = () =>
+  StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+      width: '100%',
+    },
+    button: {
+      flex: 1,
+      alignItems: 'center',
+    },
+  });
