@@ -71,7 +71,7 @@ const createStyles = () =>
     },
     header: {
       fontSize: 20,
-      paddingLeft: 10,
+      paddingLeft: 5,
       color: Colors.textTask,
     },
     emptyDay: {
@@ -86,7 +86,7 @@ const createStyles = () =>
       borderColor: Colors.navigatorBorder,
       paddingTop: 10,
       paddingBottom: 10,
-      paddingLeft: 20,
+      paddingLeft: 15,
       paddingRight: 10,
       flexDirection: 'row',
     },
